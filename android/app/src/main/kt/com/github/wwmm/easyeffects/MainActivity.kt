@@ -75,9 +75,32 @@ class MainActivity : ComponentActivity() {
     private val dynamicsStageSwitches = mutableMapOf<AndroidDynamicsStage, Switch>()
     private var updatingControls = false
     private var refreshingGlobalSwitch = false
+    private var autogainSettings = AutogainSettings()
+    private lateinit var autogainStatus: TextView
+    private lateinit var autogainMeters: TextView
+    private lateinit var autogainPlaySwitch: Switch
+    private lateinit var autogainBypassSwitch: Switch
+    private lateinit var autogainForceSilenceSwitch: Switch
+    private lateinit var autogainReferenceSpinner: Spinner
+    private lateinit var autogainTargetText: TextView
+    private lateinit var autogainSilenceText: TextView
+    private lateinit var autogainHistoryText: TextView
+    private lateinit var autogainInputGainText: TextView
+    private lateinit var autogainOutputGainText: TextView
+    private lateinit var autogainTargetSeek: SeekBar
+    private lateinit var autogainSilenceSeek: SeekBar
+    private lateinit var autogainHistorySeek: SeekBar
+    private lateinit var autogainInputGainSeek: SeekBar
+    private lateinit var autogainOutputGainSeek: SeekBar
+    private val autogainPreview: NativeAutogainPreview get() = AudioRuntime.autogainPreview
     private val statusHandler = Handler(Looper.getMainLooper())
     private val statusUpdater = object : Runnable {
-        override fun run() { refreshGlobalStatus(); statusHandler.postDelayed(this, 700) }
+        override fun run() {
+            refreshGlobalStatus()
+            refreshAutogainStatus()
+            refreshAutogainMeters()
+            statusHandler.postDelayed(this, 700)
+        }
     }
 
     private val importPreset = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> if (uri != null) importPreset(uri) }
@@ -91,6 +114,8 @@ class MainActivity : ComponentActivity() {
         } else {
             ProcessingTarget.OUTPUT
         }
+        autogainSettings = AutogainSettingsStore.load(this)
+        autogainPreview.apply(autogainSettings)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = getColor(R.color.ee_background)
         window.navigationBarColor = getColor(R.color.ee_background)
@@ -145,10 +170,31 @@ class MainActivity : ComponentActivity() {
                 }.start()
             }
         }
+        if (isDebugBuild && intent.getBooleanExtra("runAutogainPreviewTest", false)) {
+            val audioManager = getSystemService(android.media.AudioManager::class.java)
+            if (audioManager.isMusicActive) {
+                android.util.Log.w("EasyEffectsAutogainPreview", "SKIP: pause other music before the autogain preview test")
+            } else if (audioManager.isStreamMute(AudioManager.STREAM_MUSIC) ||
+                audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0
+            ) {
+                android.util.Log.e("EasyEffectsAutogainPreview", "FAIL: media output is muted; unmute the device to run the preview")
+            } else {
+                Thread {
+                    android.util.Log.i("EasyEffectsAutogainPreview", autogainPreview.runAutogainPreviewTest())
+                }.start()
+            }
+        }
     }
 
-    override fun onStart() { super.onStart(); refreshGlobalStatus(); statusHandler.post(statusUpdater) }
-    override fun onStop() { statusHandler.removeCallbacks(statusUpdater); super.onStop() }
+    override fun onStart() { super.onStart(); refreshGlobalStatus(); refreshAutogainStatus(); statusHandler.post(statusUpdater) }
+    override fun onStop() {
+        statusHandler.removeCallbacks(statusUpdater)
+        if (::autogainPlaySwitch.isInitialized && autogainPreview.isRunning) {
+            runCatching { autogainPreview.stop() }
+            refreshAutogainStatus()
+        }
+        super.onStop()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -378,7 +424,7 @@ class MainActivity : ComponentActivity() {
 
     private fun createGraphPane(): View {
         val container = android.widget.FrameLayout(this)
-        val destinations = listOf("equalizer", "bass_boost", "virtualizer", "loudness_enhancer", "compressor", "expander", "gate", "limiter")
+        val destinations = listOf("equalizer", "bass_boost", "virtualizer", "loudness_enhancer", "compressor", "expander", "gate", "limiter", "autogain")
         destinations.forEach { destination ->
             val scroll = ScrollView(this).apply {
                 isFillViewport = true
@@ -601,6 +647,7 @@ class MainActivity : ComponentActivity() {
             getString(R.string.android_dynamics_expander) to "expander",
             getString(R.string.android_dynamics_gate) to "gate",
             getString(R.string.android_dynamics_limiter) to "limiter",
+            getString(R.string.autogain_title) to "autogain",
         )
         pluginDestinations.forEach { (label, destination) ->
             lateinit var action: TextView
@@ -785,7 +832,230 @@ class MainActivity : ComponentActivity() {
                 })
             }
         }
+        buildAutogainPanel(pluginContents.getValue("autogain"))
         return sidebar
+    }
+
+    private fun buildAutogainPanel(panel: LinearLayout) {
+        panel.addView(sectionTitle(getString(R.string.autogain_preview_title)))
+        panel.addView(TextView(this).apply {
+            text = getString(R.string.autogain_preview_note)
+            textSize = 12f
+            setTextColor(getColor(R.color.ee_text_secondary))
+            setPadding(dp(2), dp(2), dp(2), dp(8))
+        })
+        autogainStatus = valueLabel()
+        panel.addView(autogainStatus)
+        autogainPlaySwitch = Switch(this).apply {
+            text = getString(R.string.autogain_play)
+            setTextColor(getColor(R.color.ee_text))
+            contentDescription = getString(R.string.autogain_play)
+            isChecked = autogainPreview.isRunning
+            setOnCheckedChangeListener { _, checked ->
+                if (updatingControls) return@setOnCheckedChangeListener
+                if (checked) {
+                    autogainPreview.apply(autogainSettings)
+                    val result = autogainPreview.start(48_000)
+                    if (result != 0) {
+                        updatingControls = true
+                        isChecked = false
+                        updatingControls = false
+                        showMessage(getString(R.string.autogain_preview_start_failed, result))
+                    }
+                } else {
+                    autogainPreview.stop()
+                }
+                refreshAutogainStatus()
+            }
+        }
+        panel.addView(autogainPlaySwitch)
+        autogainMeters = valueLabel().apply { typeface = android.graphics.Typeface.MONOSPACE }
+        panel.addView(autogainMeters)
+
+        panel.addView(sectionTitle(getString(R.string.controls)))
+        autogainBypassSwitch = Switch(this).apply {
+            text = getString(R.string.equalizer_bypass)
+            setTextColor(getColor(R.color.ee_text))
+            contentDescription = getString(R.string.equalizer_bypass)
+            isChecked = autogainSettings.bypass
+            setOnCheckedChangeListener { _, checked ->
+                if (!updatingControls) updateAutogain(autogainSettings.copy(bypass = checked))
+            }
+        }
+        panel.addView(autogainBypassSwitch)
+
+        panel.addView(sectionTitle(getString(R.string.autogain_reference)))
+        autogainReferenceSpinner = Spinner(this).apply {
+            adapter = ArrayAdapter(
+                this@MainActivity,
+                android.R.layout.simple_spinner_dropdown_item,
+                AutogainReference.entries.map { getString(it.labelResource) },
+            )
+            contentDescription = getString(R.string.autogain_reference)
+            setSelection(autogainSettings.reference.coerceIn(0, 6), false)
+            onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit
+                override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    if (!updatingControls) updateAutogain(autogainSettings.copy(reference = position))
+                }
+            }
+        }
+        panel.addView(autogainReferenceSpinner)
+
+        panel.addView(sectionTitle(getString(R.string.autogain_target)))
+        autogainTargetText = valueLabel()
+        panel.addView(autogainTargetText)
+        autogainTargetSeek = SeekBar(this).apply {
+            max = 1000
+            contentDescription = getString(R.string.autogain_target)
+            progress = ((autogainSettings.targetDb + 100f) * 10f).toInt().coerceIn(0, 1000)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress / 10f - 100f
+                autogainTargetText.text = getString(R.string.autogain_db_value, value)
+                updateAutogain(autogainSettings.copy(targetDb = value))
+            })
+        }
+        panel.addView(autogainTargetSeek)
+
+        panel.addView(sectionTitle(getString(R.string.autogain_silence)))
+        autogainSilenceText = valueLabel()
+        panel.addView(autogainSilenceText)
+        autogainSilenceSeek = SeekBar(this).apply {
+            max = 1000
+            contentDescription = getString(R.string.autogain_silence)
+            progress = ((autogainSettings.silenceThresholdDb + 100f) * 10f).toInt().coerceIn(0, 1000)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress / 10f - 100f
+                autogainSilenceText.text = getString(R.string.autogain_db_value, value)
+                updateAutogain(autogainSettings.copy(silenceThresholdDb = value))
+            })
+        }
+        panel.addView(autogainSilenceSeek)
+
+        panel.addView(sectionTitle(getString(R.string.autogain_maximum_history)))
+        autogainHistoryText = valueLabel()
+        panel.addView(autogainHistoryText)
+        autogainHistorySeek = SeekBar(this).apply {
+            max = 3594
+            contentDescription = getString(R.string.autogain_maximum_history)
+            progress = (autogainSettings.maximumHistorySeconds - 6).coerceIn(0, 3594)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress + 6
+                autogainHistoryText.text = getString(R.string.autogain_seconds_value, value)
+                updateAutogain(autogainSettings.copy(maximumHistorySeconds = value))
+            })
+        }
+        panel.addView(autogainHistorySeek)
+
+        panel.addView(sectionTitle(getString(R.string.autogain_gains)))
+        autogainInputGainText = valueLabel()
+        panel.addView(autogainInputGainText)
+        autogainInputGainSeek = SeekBar(this).apply {
+            max = 720
+            contentDescription = getString(R.string.autogain_input_gain)
+            progress = ((autogainSettings.inputGainDb + 36f) * 10f).toInt().coerceIn(0, 720)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress / 10f - 36f
+                autogainInputGainText.text = getString(R.string.autogain_input_gain_value, value)
+                updateAutogain(autogainSettings.copy(inputGainDb = value))
+            })
+        }
+        panel.addView(autogainInputGainSeek)
+        autogainOutputGainText = valueLabel()
+        panel.addView(autogainOutputGainText)
+        autogainOutputGainSeek = SeekBar(this).apply {
+            max = 720
+            contentDescription = getString(R.string.autogain_output_gain)
+            progress = ((autogainSettings.outputGainDb + 36f) * 10f).toInt().coerceIn(0, 720)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress / 10f - 36f
+                autogainOutputGainText.text = getString(R.string.autogain_output_gain_value, value)
+                updateAutogain(autogainSettings.copy(outputGainDb = value))
+            })
+        }
+        panel.addView(autogainOutputGainSeek)
+
+        autogainForceSilenceSwitch = Switch(this).apply {
+            text = getString(R.string.autogain_force_silence)
+            setTextColor(getColor(R.color.ee_text))
+            contentDescription = getString(R.string.autogain_force_silence)
+            isChecked = autogainSettings.forceSilence
+            setOnCheckedChangeListener { _, checked ->
+                if (!updatingControls) updateAutogain(autogainSettings.copy(forceSilence = checked))
+            }
+        }
+        panel.addView(autogainForceSilenceSwitch)
+
+        panel.addView(sectionTitle(getString(R.string.actions)))
+        panel.addView(textAction(getString(R.string.autogain_reset_history)) {
+            autogainPreview.resetHistory()
+            showMessage(getString(R.string.autogain_history_reset))
+        })
+        panel.addView(textAction(getString(R.string.autogain_reset_settings)) {
+            updateAutogain(AutogainSettings())
+            refreshAutogainControls()
+            showMessage(getString(R.string.autogain_settings_reset))
+        })
+        refreshAutogainControls()
+    }
+
+    private fun updateAutogain(settings: AutogainSettings) {
+        autogainSettings = settings
+        autogainPreview.apply(settings)
+        AutogainSettingsStore.save(this, settings)
+        refreshAutogainStatus()
+    }
+
+    private fun refreshAutogainControls() {
+        if (!::autogainReferenceSpinner.isInitialized) return
+        updatingControls = true
+        autogainBypassSwitch.isChecked = autogainSettings.bypass
+        autogainForceSilenceSwitch.isChecked = autogainSettings.forceSilence
+        autogainReferenceSpinner.setSelection(autogainSettings.reference.coerceIn(0, 6), false)
+        autogainTargetText.text = getString(R.string.autogain_db_value, autogainSettings.targetDb)
+        autogainTargetSeek.progress = ((autogainSettings.targetDb + 100f) * 10f).toInt().coerceIn(0, 1000)
+        autogainSilenceText.text = getString(R.string.autogain_db_value, autogainSettings.silenceThresholdDb)
+        autogainSilenceSeek.progress = ((autogainSettings.silenceThresholdDb + 100f) * 10f).toInt().coerceIn(0, 1000)
+        autogainHistoryText.text = getString(R.string.autogain_seconds_value, autogainSettings.maximumHistorySeconds)
+        autogainHistorySeek.progress = (autogainSettings.maximumHistorySeconds - 6).coerceIn(0, 3594)
+        autogainInputGainText.text = getString(R.string.autogain_input_gain_value, autogainSettings.inputGainDb)
+        autogainInputGainSeek.progress = ((autogainSettings.inputGainDb + 36f) * 10f).toInt().coerceIn(0, 720)
+        autogainOutputGainText.text = getString(R.string.autogain_output_gain_value, autogainSettings.outputGainDb)
+        autogainOutputGainSeek.progress = ((autogainSettings.outputGainDb + 36f) * 10f).toInt().coerceIn(0, 720)
+        updatingControls = false
+    }
+
+    private fun refreshAutogainStatus() {
+        if (!::autogainStatus.isInitialized) return
+        autogainStatus.text = if (autogainPreview.isRunning) {
+            getString(R.string.autogain_status_playing, autogainPreview.renderedFrames)
+        } else {
+            getString(R.string.autogain_status_stopped)
+        }
+        if (::autogainPlaySwitch.isInitialized && autogainPlaySwitch.isChecked != autogainPreview.isRunning) {
+            updatingControls = true
+            autogainPlaySwitch.isChecked = autogainPreview.isRunning
+            updatingControls = false
+        }
+    }
+
+    private fun refreshAutogainMeters() {
+        if (!::autogainMeters.isInitialized) return
+        val levels = autogainPreview.levels()
+        autogainMeters.text = getString(
+            R.string.autogain_meters,
+            levels.momentaryLufs,
+            levels.shorttermLufs,
+            levels.integratedLufs,
+            levels.relativeLufs,
+            levels.rangeLu,
+            levels.loudnessLufs,
+            levels.outputGainDb,
+            levels.inputLeftDb,
+            levels.inputRightDb,
+            levels.outputLeftDb,
+            levels.outputRightDb,
+        )
     }
 
     private fun showPlugin(destination: String) {

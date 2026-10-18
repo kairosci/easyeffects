@@ -49,9 +49,12 @@ use pills, rounded cards, gradients, or large glow effects.
    vertical plugin list. The app bar remains above the drawer, and its menu icon
    changes to a close icon while open so the same control can close it.
    Selecting an entry closes the drawer and moves the main content to that
-   plugin's controls. Each Android-backed plugin has its own entry:
+   plugin's controls. Each Android-backed plugin, plus the Autogain preview,
+   has its own entry:
    Equalizer, Bass Boost, Virtualizer, Loudness Enhancer, Compressor, Expander,
-   Gate, and Limiter. Selecting an entry jumps to that plugin's own parameter
+   Gate, Limiter, and Autogain. Autogain is a portable C++ DSP driven through an
+   app-owned AAudio preview rather than a global route. Selecting an entry jumps
+   to that plugin's own parameter
    group below. Desktop plugins without a working Android backend stay in the
    parity catalog and roadmap; they are not shown as empty controls.
 6. The graph and active plugin controls remain in the main content; the drawer

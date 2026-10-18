@@ -12,10 +12,18 @@ add_library(easyeffects_bs2b STATIC
 target_include_directories(easyeffects_bs2b PUBLIC third_party/libbs2b)
 set_target_properties(easyeffects_bs2b PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
 
+add_library(easyeffects_ebur128 STATIC
+    third_party/libebur128/ebur128.c
+)
+target_include_directories(easyeffects_ebur128 PUBLIC third_party/libebur128)
+set_target_properties(easyeffects_ebur128 PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
+
 if(ANDROID)
     add_library(easyeffects_audio SHARED
         android_global_equalizer.cpp
         android_platform_effects_backend.cpp
+        android_autogain_preview.cpp
+        autogain_processor.cpp
         bass_loudness_processor.cpp
         crossfeed_processor.cpp
         crusher_processor.cpp
@@ -35,7 +43,7 @@ if(ANDROID)
     # Android 15+ devices can use 16 KB memory pages. Keep every ELF PT_LOAD
     # segment aligned to that page size (NDK r27 does not enable this by default).
     target_link_options(easyeffects_audio PRIVATE -Wl,-z,max-page-size=16384)
-    target_link_libraries(easyeffects_audio PRIVATE easyeffects_bs2b android log aaudio)
+    target_link_libraries(easyeffects_audio PRIVATE easyeffects_bs2b easyeffects_ebur128 android log aaudio)
 endif()
 
 if(BUILD_TESTING AND NOT ANDROID)
@@ -97,4 +105,13 @@ if(BUILD_TESTING AND NOT ANDROID)
     target_compile_options(easyeffects_bass_loudness_tests PRIVATE -Wall -Wextra -Wpedantic -Wconversion)
     target_include_directories(easyeffects_bass_loudness_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
     add_test(NAME easyeffects_bass_loudness_tests COMMAND easyeffects_bass_loudness_tests)
+
+    add_executable(easyeffects_autogain_tests
+        ../../../../tests/autogain_processor_test.cpp
+        autogain_processor.cpp
+    )
+    target_compile_features(easyeffects_autogain_tests PRIVATE cxx_std_20)
+    target_compile_options(easyeffects_autogain_tests PRIVATE -Wall -Wextra -Wpedantic -Wconversion)
+    target_link_libraries(easyeffects_autogain_tests PRIVATE easyeffects_ebur128)
+    add_test(NAME easyeffects_autogain_tests COMMAND easyeffects_autogain_tests)
 endif()

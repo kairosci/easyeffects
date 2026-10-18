@@ -12,7 +12,7 @@ plugin unless its DSP and behavior are shown to match.
 
 | Desktop module | Android status |
 | --- | --- |
-| Autogain | Not implemented |
+| Autogain | Desktop ITU-R BS.1770 loudness measurement with vendored libebur128 1.2.6, reference modes, target, silence, maximum history, force silence, peak ceiling, attack/release, common gains, bypass, reset, and level meters implemented and tested in C++; Android screen drives an app-owned AAudio preview of the ported DSP; global system route unavailable to ordinary Android apps |
 | Autotune | Not implemented |
 | Bass Enhancer | Not implemented |
 | Bass Loudness | MDA equal-loudness contour DSP, desktop parameter mapping, Link, bypass, and common gains implemented in C++; Android plugin screen and global route pending |
@@ -58,6 +58,20 @@ it is not exposed in the app because no supported Android global route can run
 its custom PCM processor. FIR/FFT/SPM modes and several LSP filter details still
 need a faithful port.
 
+The Autogain port vendors libebur128 1.2.6, the same measurement library and
+modes the desktop uses, and reproduces the desktop reference selection, target
+correction, `1 / peak` safe ceiling, 0.1/0.4 s attack and release, silence
+handling, force-silence floor, common gains, bypass, reset, and counter. Its host
+C++ tests compare momentary, short-term and integrated loudness against a fresh
+libebur128 state and cover range clamping, the peak ceiling, force silence,
+bypass, reset, and chunk-boundary stability. Because ordinary Android apps still
+cannot insert a processor into other apps' output, the Android Autogain screen
+drives an app-owned AAudio preview: the app generates its own 997 Hz stereo tone
+and runs it through the ported C++ Autogain DSP, so each control acts on a real
+DSP backend. It does not transform other apps' playback; that remains blocked by
+the platform boundary below. The preview engine compiles into both ABIs but has
+not yet been run on a device here.
+
 Android system effects (Bass Boost, Virtualizer, and Loudness Enhancer) are
 currently platform-specific controls, not desktop plugin parity. Their global
 session behavior is vendor dependent. Each desktop plugin still requires its
@@ -72,26 +86,36 @@ implemented and verified against desktop reference fixtures.
 
 The curve editor currently uses a custom Android `View`; it is visible on
 launch and connected to the native C++ response. The left drawer contains only
-the vertical selector for the eight Android-backed plugin components. The graph
+the vertical selector for the nine Android-backed plugin components. The graph
 and implemented controls live in the main scrolling content, so parameters are
 present by default without opening the drawer. Selecting a plugin closes the
 drawer, updates the header, and scrolls the main content to its parameters. The
 current APK does not embed the desktop QML runtime. The Qt Quick adaptation is
 tracked in the roadmap.
 
-Each of those eight pages has its own enabled switch at the top of the page.
-The equalizer switch changes only the equalizer; Bass Boost, Virtualizer,
-Loudness Enhancer, Compressor, Expander, Gate, and Limiter each change only
-their own backend state. The background service tracks whether any output
-plugin remains active, so switching one processor off does not turn off the
-others. Desktop processors that have not been ported are not exposed as
-inactive or placeholder switches.
+Each of those pages has its own activator at the top of the page. The equalizer
+switch changes only the equalizer; Bass Boost, Virtualizer, Loudness Enhancer,
+Compressor, Expander, Gate, and Limiter each change only their own backend state.
+Autogain's page uses a preview toggle that starts and stops the app-owned AAudio
+preview of its DSP. The background service tracks whether any output plugin
+remains active, so switching one processor off does not turn off the others.
+Desktop processors that have not been ported are not exposed as inactive or
+placeholder switches.
 
 The debug APK also has a C++ AAudio PCM playback proof. On the Pixel 7a, its
 generated 1 kHz signal passed through the C++ parametric equalizer and produced
 the configured +12 dB energy gain while rendering through AAudio. This
 proves app-owned PCM processing; it does not prove global processing of other
 apps' playback.
+
+The Autogain screen uses the same app-owned category: its preview toggle opens an
+AAudio output stream, generates a 997 Hz stereo tone in the native callback, runs
+the ported `AutogainProcessor` on it, and prints live loudness and peak meters.
+This is a real DSP backend for the controls; it is still app-owned PCM and no
+device run is recorded here. A device is required to confirm audio output and
+that the meter readings track the target. A debug-only `runAutogainPreviewTest`
+intent runs the preview for up to eight seconds and reports whether the measured
+output gain converged to the target within 1.5 dB.
 
 To repeat the device check with a connected Pixel 7a, build the debug APK and
 launch the C++ check from the app:
@@ -101,8 +125,8 @@ cd android
 ANDROID_HOME=/path/to/Android/Sdk ./gradlew :app:assembleDebug
 /path/to/Android/Sdk/platform-tools/adb install -r app/build/outputs/apk/debug/app-debug.apk
 /path/to/Android/Sdk/platform-tools/adb shell am force-stop com.github.wwmm.easyeffects
-/path/to/Android/Sdk/platform-tools/adb shell am start -n com.github.wwmm.easyeffects/.MainActivity --ez runCppBackendChecks true --ez runPcmPlaybackTest true
-/path/to/Android/Sdk/platform-tools/adb logcat -s EasyEffectsNativeTests:I EasyEffectsPcmPreview:I
+/path/to/Android/Sdk/platform-tools/adb shell am start -n com.github.wwmm.easyeffects/.MainActivity --ez runCppBackendChecks true --ez runPcmPlaybackTest true --ez runAutogainPreviewTest true
+/path/to/Android/Sdk/platform-tools/adb logcat -s EasyEffectsNativeTests:I EasyEffectsPcmPreview:I EasyEffectsAutogainPreview:I
 ```
 
 Before running, turn off any enabled Android platform or DynamicsProcessing

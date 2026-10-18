@@ -3,9 +3,11 @@
  * Copyright © 2026 Alessio Attilio
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+#include "android_autogain_preview.hpp"
 #include "android_global_equalizer.hpp"
 #include "android_platform_effects_backend.hpp"
 #include "android_pcm_preview.hpp"
+#include "autogain_processor.hpp"
 #include "parametric_equalizer.hpp"
 
 #include <jni.h>
@@ -17,6 +19,10 @@
 namespace {
 auto engine_from(const jlong handle) noexcept -> ee::mobile::ParametricEqualizer* {
   return reinterpret_cast<ee::mobile::ParametricEqualizer*>(static_cast<std::uintptr_t>(handle));
+}
+
+auto autogain_engine_from(const jlong handle) noexcept -> ee::mobile::AutogainPreviewEngine* {
+  return reinterpret_cast<ee::mobile::AutogainPreviewEngine*>(static_cast<std::uintptr_t>(handle));
 }
 
 void throw_illegal_state(JNIEnv* env, const std::string& message) {
@@ -345,3 +351,105 @@ extern "C" JNIEXPORT jstring JNICALL
 Java_com_github_wwmm_easyeffects_NativeEqualizer_nativeRunPcmPlaybackTest(JNIEnv* env, jobject) {
   return ee::mobile::run_pcm_playback_test(env);
 }
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeCreate(JNIEnv*, jobject) {
+  auto engine = std::make_unique<ee::mobile::AutogainPreviewEngine>();
+  return static_cast<jlong>(reinterpret_cast<std::uintptr_t>(engine.release()));
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeDestroy(JNIEnv*, jobject, const jlong handle) {
+  auto* const engine = autogain_engine_from(handle);
+  if (engine != nullptr) {
+    engine->stop();
+    delete engine;
+  }
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeStart(JNIEnv*,
+                                                                   jobject,
+                                                                   const jlong handle,
+                                                                   const jfloat desired_sample_rate) {
+  auto* const engine = autogain_engine_from(handle);
+  if (engine == nullptr) {
+    return -1000;
+  }
+  return static_cast<jint>(engine->start(desired_sample_rate));
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeStop(JNIEnv*, jobject, const jlong handle) {
+  if (auto* const engine = autogain_engine_from(handle); engine != nullptr) {
+    engine->stop();
+  }
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeIsRunning(JNIEnv*, jobject, const jlong handle) {
+  const auto* const engine = autogain_engine_from(handle);
+  return engine != nullptr && engine->is_running() ? JNI_TRUE : JNI_FALSE;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeSetParameters(JNIEnv*,
+                                                                           jobject,
+                                                                           const jlong handle,
+                                                                           const jint reference,
+                                                                           const jfloat target_db,
+                                                                           const jfloat silence_threshold_db,
+                                                                           const jint maximum_history_seconds,
+                                                                           const jboolean force_silence,
+                                                                           const jfloat input_gain_db,
+                                                                           const jfloat output_gain_db,
+                                                                           const jboolean bypass) {
+  auto* const engine = autogain_engine_from(handle);
+  if (engine == nullptr) {
+    return;
+  }
+  engine->set_parameters({.reference = static_cast<ee::mobile::AutogainReference>(reference),
+                          .target_db = target_db,
+                          .silence_threshold_db = silence_threshold_db,
+                          .maximum_history_seconds = maximum_history_seconds,
+                          .force_silence = force_silence == JNI_TRUE,
+                          .input_gain_db = input_gain_db,
+                          .output_gain_db = output_gain_db,
+                          .bypass = bypass == JNI_TRUE});
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeResetHistory(JNIEnv*, jobject, const jlong handle) {
+  if (auto* const engine = autogain_engine_from(handle); engine != nullptr) {
+    engine->reset_history();
+  }
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeLevels(JNIEnv* env, jobject, const jlong handle) {
+  constexpr jsize level_count = 11;
+  jfloatArray result = env->NewFloatArray(level_count);
+  const auto* const engine = autogain_engine_from(handle);
+  if (engine == nullptr || result == nullptr) {
+    return result;
+  }
+  const auto levels = engine->levels();
+  const jfloat values[level_count] = {levels.momentary_lufs, levels.shortterm_lufs, levels.integrated_lufs,
+                                      levels.relative_lufs,  levels.range_lu,     levels.loudness_lufs,
+                                      levels.output_gain_db, levels.input_left_db, levels.input_right_db,
+                                      levels.output_left_db, levels.output_right_db};
+  env->SetFloatArrayRegion(result, 0, level_count, values);
+  return result;
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeRenderedFrames(JNIEnv*, jobject, const jlong handle) {
+  const auto* const engine = autogain_engine_from(handle);
+  return engine == nullptr ? 0 : static_cast<jlong>(engine->rendered_frames());
+}
+
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeRunAutogainPreviewTest(JNIEnv* env, jobject) {
+  return ee::mobile::run_autogain_preview_test(env);
+}
+

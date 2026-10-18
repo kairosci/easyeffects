@@ -48,11 +48,24 @@ verifies audible **app-owned** PCM processing through the C++ implementation;
 it is not evidence that other apps' PCM is transformed by the global session-0
 effects.
 
+The Autogain plugin screen uses the same app-owned AAudio category. Its preview
+toggle opens an output stream, generates a 997 Hz stereo tone in the native
+callback, runs the ported `AutogainProcessor` (vendored libebur128 1.2.6) on it,
+and republishes live momentary/short-term/integrated/relative/range/loudness,
+output-gain and peak meters. Every screen control maps to the desktop parameter
+set and acts on this DSP backend. A debug-only `runAutogainPreviewTest` intent
+runs the preview for up to eight seconds and checks that it rendered at least one
+second of frames and that the measured output gain converged to the target within
+1.5 dB. No device run of the preview is recorded here; a connected device is
+needed to confirm audible output and that the meters track the target. Global
+processing of other apps' playback remains unavailable to ordinary apps, so
+Autogain stays app-owned.
+
 ## Desktop plugin inventory
 
 | Desktop plugin | Android integration plan | State |
 | --- | --- | --- |
-| Autogain | Requires output level measurement and gain control in the system route | Blocked by output tap |
+| Autogain | Vendored libebur128 1.2.6 and portable C++ desktop DSP port (references, target, silence, history, force silence, ceiling, gains, bypass, meters) with host tests; Android screen drives an app-owned AAudio preview tone through the DSP | DSP + app-owned preview implemented; output tap still unavailable to ordinary apps |
 | Autotune | Port pitch detector/correction DSP to C++; requires global PCM route | Blocked by output tap |
 | Bass Enhancer | Android `BassBoost` is only a device dependent approximation | Partial system effect |
 | Bass Loudness | MDA/Stevens-Davis contour model, desktop dB-to-LV2 mapping, link, bypass, common gains, and C++ tests implemented | DSP partial; Android screen and system route unavailable |
@@ -107,7 +120,7 @@ effects.
    debug JNI check now verifies this lifecycle separately from EQ activation.
    Pixel 7a returned PASS for all four mapped stages and for Compressor running
    with the global EQ disabled.
-4. **Portable DSP ports — Crossfeed, Crusher, Delay, Crosstalk Canceller, and Bass Loudness implemented; Mid/Side IIR core added; C++ tests pass.**
+4. **Portable DSP ports — Crossfeed, Crusher, Delay, Crosstalk Canceller, Bass Loudness, and Autogain implemented; Mid/Side IIR core added; C++ tests pass.**
    Crossfeed uses upstream libbs2b 3.1.0; Crusher follows Calf's LGPL DSP
    algorithms; Delay follows the LSP plugin control set; Crosstalk Canceller
    uses the desktop's fitted six-filter correction. Mid/Side has linked/split
@@ -116,7 +129,10 @@ effects.
    activators pending until a supported PCM route can consume output.
    Bass Loudness ports the MDA equal-loudness contour model and EasyEffects' dB
    to normalized LV2 parameter mapping; Android UI and system routing remain
-   pending.
+   pending. Autogain vendors libebur128 1.2.6 and ports the desktop reference,
+   target, silence, maximum-history, force-silence, ceiling, gain, bypass, reset,
+   and meter behavior; its Android screen drives an app-owned AAudio preview, so
+   the controls run a real DSP backend while global routing stays blocked.
 5. **Portable desktop DSP ports.** Extract or port the remaining algorithms one at a time to
    C++20 with no Linux/PipeWire dependency. Add dedicated C++ tests and numerical
    comparison fixtures against desktop implementations.
