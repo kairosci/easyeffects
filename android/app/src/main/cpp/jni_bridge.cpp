@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 #include "android_autogain_preview.hpp"
+#include "android_bass_enhancer_preview.hpp"
 #include "android_global_equalizer.hpp"
 #include "android_platform_effects_backend.hpp"
 #include "android_pcm_preview.hpp"
 #include "autogain_processor.hpp"
+#include "bass_enhancer_processor.hpp"
 #include "parametric_equalizer.hpp"
 
 #include <jni.h>
@@ -23,6 +25,10 @@ auto engine_from(const jlong handle) noexcept -> ee::mobile::ParametricEqualizer
 
 auto autogain_engine_from(const jlong handle) noexcept -> ee::mobile::AutogainPreviewEngine* {
   return reinterpret_cast<ee::mobile::AutogainPreviewEngine*>(static_cast<std::uintptr_t>(handle));
+}
+
+auto bass_enhancer_engine_from(const jlong handle) noexcept -> ee::mobile::BassEnhancerPreviewEngine* {
+  return reinterpret_cast<ee::mobile::BassEnhancerPreviewEngine*>(static_cast<std::uintptr_t>(handle));
 }
 
 void throw_illegal_state(JNIEnv* env, const std::string& message) {
@@ -451,5 +457,105 @@ Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeRenderedFrames(JNIE
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_github_wwmm_easyeffects_NativeAutogainPreview_nativeRunAutogainPreviewTest(JNIEnv* env, jobject) {
   return ee::mobile::run_autogain_preview_test(env);
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeCreate(JNIEnv*, jobject) {
+  auto engine = std::make_unique<ee::mobile::BassEnhancerPreviewEngine>();
+  return static_cast<jlong>(reinterpret_cast<std::uintptr_t>(engine.release()));
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeDestroy(JNIEnv*, jobject, const jlong handle) {
+  auto* const engine = bass_enhancer_engine_from(handle);
+  if (engine != nullptr) {
+    engine->stop();
+    delete engine;
+  }
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeStart(JNIEnv*,
+                                                                       jobject,
+                                                                       const jlong handle,
+                                                                       const jfloat desired_sample_rate) {
+  auto* const engine = bass_enhancer_engine_from(handle);
+  if (engine == nullptr) {
+    return -1000;
+  }
+  return static_cast<jint>(engine->start(desired_sample_rate));
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeStop(JNIEnv*, jobject, const jlong handle) {
+  if (auto* const engine = bass_enhancer_engine_from(handle); engine != nullptr) {
+    engine->stop();
+  }
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeIsRunning(JNIEnv*, jobject, const jlong handle) {
+  const auto* const engine = bass_enhancer_engine_from(handle);
+  return engine != nullptr && engine->is_running() ? JNI_TRUE : JNI_FALSE;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeSetParameters(JNIEnv*,
+                                                                               jobject,
+                                                                               const jlong handle,
+                                                                               const jfloat amount_db,
+                                                                               const jfloat harmonics,
+                                                                               const jfloat scope_hz,
+                                                                               const jfloat floor_hz,
+                                                                               const jfloat blend,
+                                                                               const jboolean floor_active,
+                                                                               const jboolean listen,
+                                                                               const jfloat input_gain_db,
+                                                                               const jfloat output_gain_db,
+                                                                               const jboolean bypass) {
+  auto* const engine = bass_enhancer_engine_from(handle);
+  if (engine == nullptr) {
+    return;
+  }
+  engine->set_parameters({.amount_db = amount_db,
+                          .harmonics = harmonics,
+                          .scope_hz = scope_hz,
+                          .floor_hz = floor_hz,
+                          .blend = blend,
+                          .floor_active = floor_active == JNI_TRUE,
+                          .listen = listen == JNI_TRUE,
+                          .input_gain_db = input_gain_db,
+                          .output_gain_db = output_gain_db,
+                          .bypass = bypass == JNI_TRUE});
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeLevels(JNIEnv* env,
+                                                                        jobject,
+                                                                        const jlong handle) {
+  constexpr jsize level_count = 5;
+  jfloatArray result = env->NewFloatArray(level_count);
+  const auto* const engine = bass_enhancer_engine_from(handle);
+  if (engine == nullptr || result == nullptr) {
+    return result;
+  }
+  const auto levels = engine->levels();
+  const jfloat values[level_count] = {levels.input_left_db, levels.input_right_db, levels.output_left_db,
+                                      levels.output_right_db, levels.harmonics_level_db};
+  env->SetFloatArrayRegion(result, 0, level_count, values);
+  return result;
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeRenderedFrames(JNIEnv*,
+                                                                                jobject,
+                                                                                const jlong handle) {
+  const auto* const engine = bass_enhancer_engine_from(handle);
+  return engine == nullptr ? 0 : static_cast<jlong>(engine->rendered_frames());
+}
+
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_github_wwmm_easyeffects_NativeBassEnhancerPreview_nativeRunBassEnhancerPreviewTest(JNIEnv* env, jobject) {
+  return ee::mobile::run_bass_enhancer_preview_test(env);
 }
 

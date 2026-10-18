@@ -20,8 +20,9 @@ effects and an enabled UI switch are not substitutes for processor parity.
 - Every plugin shown in the sidebar has its own activator at the top of its
   page. The EQ switch controls only EQ; platform and dynamics switches control
   only their own effect, while the background service stays alive for as long as
-  any output plugin remains enabled. Autogain has its own page whose preview
-  toggle drives the ported C++ DSP through an app-owned AAudio tone.
+  any output plugin remains enabled. Autogain and Bass Enhancer have their own
+  pages whose preview toggles drive the ported C++ DSP through an app-owned
+  AAudio tone.
 - Global enable/bypass and preset import/export actions on App; Android system
   scope is described honestly.
 - About page and desktop-derived dark palette, spacing, and angular controls.

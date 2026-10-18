@@ -23,7 +23,9 @@ if(ANDROID)
         android_global_equalizer.cpp
         android_platform_effects_backend.cpp
         android_autogain_preview.cpp
+        android_bass_enhancer_preview.cpp
         autogain_processor.cpp
+        bass_enhancer_processor.cpp
         bass_loudness_processor.cpp
         crossfeed_processor.cpp
         crusher_processor.cpp
@@ -114,4 +116,12 @@ if(BUILD_TESTING AND NOT ANDROID)
     target_compile_options(easyeffects_autogain_tests PRIVATE -Wall -Wextra -Wpedantic -Wconversion)
     target_link_libraries(easyeffects_autogain_tests PRIVATE easyeffects_ebur128)
     add_test(NAME easyeffects_autogain_tests COMMAND easyeffects_autogain_tests)
+
+    add_executable(easyeffects_bass_enhancer_tests
+        ../../../../tests/bass_enhancer_processor_test.cpp
+        bass_enhancer_processor.cpp
+    )
+    target_compile_features(easyeffects_bass_enhancer_tests PRIVATE cxx_std_20)
+    target_compile_options(easyeffects_bass_enhancer_tests PRIVATE -Wall -Wextra -Wpedantic -Wconversion)
+    add_test(NAME easyeffects_bass_enhancer_tests COMMAND easyeffects_bass_enhancer_tests)
 endif()

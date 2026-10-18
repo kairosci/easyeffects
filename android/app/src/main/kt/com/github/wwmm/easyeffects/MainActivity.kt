@@ -92,13 +92,37 @@ class MainActivity : ComponentActivity() {
     private lateinit var autogainHistorySeek: SeekBar
     private lateinit var autogainInputGainSeek: SeekBar
     private lateinit var autogainOutputGainSeek: SeekBar
+    private var bassEnhancerSettings = BassEnhancerSettings()
+    private lateinit var bassEnhancerStatus: TextView
+    private lateinit var bassEnhancerMeters: TextView
+    private lateinit var bassEnhancerPlaySwitch: Switch
+    private lateinit var bassEnhancerBypassSwitch: Switch
+    private lateinit var bassEnhancerFloorActiveSwitch: Switch
+    private lateinit var bassEnhancerListenSwitch: Switch
+    private lateinit var bassEnhancerAmountText: TextView
+    private lateinit var bassEnhancerHarmonicsText: TextView
+    private lateinit var bassEnhancerScopeText: TextView
+    private lateinit var bassEnhancerFloorText: TextView
+    private lateinit var bassEnhancerBlendText: TextView
+    private lateinit var bassEnhancerInputGainText: TextView
+    private lateinit var bassEnhancerOutputGainText: TextView
+    private lateinit var bassEnhancerAmountSeek: SeekBar
+    private lateinit var bassEnhancerHarmonicsSeek: SeekBar
+    private lateinit var bassEnhancerScopeSeek: SeekBar
+    private lateinit var bassEnhancerFloorSeek: SeekBar
+    private lateinit var bassEnhancerBlendSeek: SeekBar
+    private lateinit var bassEnhancerInputGainSeek: SeekBar
+    private lateinit var bassEnhancerOutputGainSeek: SeekBar
     private val autogainPreview: NativeAutogainPreview get() = AudioRuntime.autogainPreview
+    private val bassEnhancerPreview: NativeBassEnhancerPreview get() = AudioRuntime.bassEnhancerPreview
     private val statusHandler = Handler(Looper.getMainLooper())
     private val statusUpdater = object : Runnable {
         override fun run() {
             refreshGlobalStatus()
             refreshAutogainStatus()
             refreshAutogainMeters()
+            refreshBassEnhancerStatus()
+            refreshBassEnhancerMeters()
             statusHandler.postDelayed(this, 700)
         }
     }
@@ -116,6 +140,8 @@ class MainActivity : ComponentActivity() {
         }
         autogainSettings = AutogainSettingsStore.load(this)
         autogainPreview.apply(autogainSettings)
+        bassEnhancerSettings = BassEnhancerSettingsStore.load(this)
+        bassEnhancerPreview.apply(bassEnhancerSettings)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = getColor(R.color.ee_background)
         window.navigationBarColor = getColor(R.color.ee_background)
@@ -184,14 +210,32 @@ class MainActivity : ComponentActivity() {
                 }.start()
             }
         }
+        if (isDebugBuild && intent.getBooleanExtra("runBassEnhancerPreviewTest", false)) {
+            val audioManager = getSystemService(android.media.AudioManager::class.java)
+            if (audioManager.isMusicActive) {
+                android.util.Log.w("EasyEffectsBassEnhancerPreview", "SKIP: pause other music before the bass enhancer preview test")
+            } else if (audioManager.isStreamMute(AudioManager.STREAM_MUSIC) ||
+                audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0
+            ) {
+                android.util.Log.e("EasyEffectsBassEnhancerPreview", "FAIL: media output is muted; unmute the device to run the preview")
+            } else {
+                Thread {
+                    android.util.Log.i("EasyEffectsBassEnhancerPreview", bassEnhancerPreview.runBassEnhancerPreviewTest())
+                }.start()
+            }
+        }
     }
 
-    override fun onStart() { super.onStart(); refreshGlobalStatus(); refreshAutogainStatus(); statusHandler.post(statusUpdater) }
+    override fun onStart() { super.onStart(); refreshGlobalStatus(); refreshAutogainStatus(); refreshBassEnhancerStatus(); statusHandler.post(statusUpdater) }
     override fun onStop() {
         statusHandler.removeCallbacks(statusUpdater)
         if (::autogainPlaySwitch.isInitialized && autogainPreview.isRunning) {
             runCatching { autogainPreview.stop() }
             refreshAutogainStatus()
+        }
+        if (::bassEnhancerPlaySwitch.isInitialized && bassEnhancerPreview.isRunning) {
+            runCatching { bassEnhancerPreview.stop() }
+            refreshBassEnhancerStatus()
         }
         super.onStop()
     }
@@ -424,7 +468,7 @@ class MainActivity : ComponentActivity() {
 
     private fun createGraphPane(): View {
         val container = android.widget.FrameLayout(this)
-        val destinations = listOf("equalizer", "bass_boost", "virtualizer", "loudness_enhancer", "compressor", "expander", "gate", "limiter", "autogain")
+        val destinations = listOf("equalizer", "bass_boost", "virtualizer", "loudness_enhancer", "compressor", "expander", "gate", "limiter", "autogain", "bass_enhancer")
         destinations.forEach { destination ->
             val scroll = ScrollView(this).apply {
                 isFillViewport = true
@@ -648,6 +692,7 @@ class MainActivity : ComponentActivity() {
             getString(R.string.android_dynamics_gate) to "gate",
             getString(R.string.android_dynamics_limiter) to "limiter",
             getString(R.string.autogain_title) to "autogain",
+            getString(R.string.bass_enhancer_title) to "bass_enhancer",
         )
         pluginDestinations.forEach { (label, destination) ->
             lateinit var action: TextView
@@ -833,6 +878,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         buildAutogainPanel(pluginContents.getValue("autogain"))
+        buildBassEnhancerPanel(pluginContents.getValue("bass_enhancer"))
         return sidebar
     }
 
@@ -1055,6 +1101,246 @@ class MainActivity : ComponentActivity() {
             levels.inputRightDb,
             levels.outputLeftDb,
             levels.outputRightDb,
+        )
+    }
+
+    private fun buildBassEnhancerPanel(panel: LinearLayout) {
+        panel.addView(sectionTitle(getString(R.string.bass_enhancer_preview_title)))
+        panel.addView(TextView(this).apply {
+            text = getString(R.string.bass_enhancer_preview_note)
+            textSize = 12f
+            setTextColor(getColor(R.color.ee_text_secondary))
+            setPadding(dp(2), dp(2), dp(2), dp(8))
+        })
+        bassEnhancerStatus = valueLabel()
+        panel.addView(bassEnhancerStatus)
+        bassEnhancerPlaySwitch = Switch(this).apply {
+            text = getString(R.string.bass_enhancer_play)
+            setTextColor(getColor(R.color.ee_text))
+            contentDescription = getString(R.string.bass_enhancer_play)
+            isChecked = bassEnhancerPreview.isRunning
+            setOnCheckedChangeListener { _, checked ->
+                if (updatingControls) return@setOnCheckedChangeListener
+                if (checked) {
+                    bassEnhancerPreview.apply(bassEnhancerSettings)
+                    val result = bassEnhancerPreview.start(48_000)
+                    if (result != 0) {
+                        updatingControls = true
+                        isChecked = false
+                        updatingControls = false
+                        showMessage(getString(R.string.bass_enhancer_preview_start_failed, result))
+                    }
+                } else {
+                    bassEnhancerPreview.stop()
+                }
+                refreshBassEnhancerStatus()
+            }
+        }
+        panel.addView(bassEnhancerPlaySwitch)
+        bassEnhancerMeters = valueLabel().apply { typeface = android.graphics.Typeface.MONOSPACE }
+        panel.addView(bassEnhancerMeters)
+
+        panel.addView(sectionTitle(getString(R.string.controls)))
+        bassEnhancerBypassSwitch = Switch(this).apply {
+            text = getString(R.string.equalizer_bypass)
+            setTextColor(getColor(R.color.ee_text))
+            contentDescription = getString(R.string.equalizer_bypass)
+            isChecked = bassEnhancerSettings.bypass
+            setOnCheckedChangeListener { _, checked ->
+                if (!updatingControls) updateBassEnhancer(bassEnhancerSettings.copy(bypass = checked))
+            }
+        }
+        panel.addView(bassEnhancerBypassSwitch)
+
+        panel.addView(sectionTitle(getString(R.string.bass_enhancer_amount)))
+        bassEnhancerAmountText = valueLabel()
+        panel.addView(bassEnhancerAmountText)
+        bassEnhancerAmountSeek = SeekBar(this).apply {
+            max = 1360
+            contentDescription = getString(R.string.bass_enhancer_amount)
+            progress = ((bassEnhancerSettings.amountDb + 100f) * 10f).toInt().coerceIn(0, 1360)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress / 10f - 100f
+                bassEnhancerAmountText.text = getString(R.string.bass_enhancer_amount_value, value)
+                updateBassEnhancer(bassEnhancerSettings.copy(amountDb = value))
+            })
+        }
+        panel.addView(bassEnhancerAmountSeek)
+
+        panel.addView(sectionTitle(getString(R.string.bass_enhancer_harmonics)))
+        bassEnhancerHarmonicsText = valueLabel()
+        panel.addView(bassEnhancerHarmonicsText)
+        bassEnhancerHarmonicsSeek = SeekBar(this).apply {
+            max = 99
+            contentDescription = getString(R.string.bass_enhancer_harmonics)
+            progress = ((bassEnhancerSettings.harmonics - 0.1f) * 10f).toInt().coerceIn(0, 99)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress / 10f + 0.1f
+                bassEnhancerHarmonicsText.text = getString(R.string.bass_enhancer_harmonics_value, value)
+                updateBassEnhancer(bassEnhancerSettings.copy(harmonics = value))
+            })
+        }
+        panel.addView(bassEnhancerHarmonicsSeek)
+
+        panel.addView(sectionTitle(getString(R.string.bass_enhancer_scope)))
+        bassEnhancerScopeText = valueLabel()
+        panel.addView(bassEnhancerScopeText)
+        bassEnhancerScopeSeek = SeekBar(this).apply {
+            max = 240
+            contentDescription = getString(R.string.bass_enhancer_scope)
+            progress = (bassEnhancerSettings.scopeHz.toInt() - 10).coerceIn(0, 240)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress + 10
+                bassEnhancerScopeText.text = getString(R.string.bass_enhancer_scope_value, value)
+                updateBassEnhancer(bassEnhancerSettings.copy(scopeHz = value.toFloat()))
+            })
+        }
+        panel.addView(bassEnhancerScopeSeek)
+
+        bassEnhancerFloorActiveSwitch = Switch(this).apply {
+            text = getString(R.string.bass_enhancer_floor_active)
+            setTextColor(getColor(R.color.ee_text))
+            contentDescription = getString(R.string.bass_enhancer_floor_active)
+            isChecked = bassEnhancerSettings.floorActive
+            setOnCheckedChangeListener { _, checked ->
+                bassEnhancerFloorSeek.isEnabled = checked
+                if (!updatingControls) updateBassEnhancer(bassEnhancerSettings.copy(floorActive = checked))
+            }
+        }
+        panel.addView(bassEnhancerFloorActiveSwitch)
+        panel.addView(sectionTitle(getString(R.string.bass_enhancer_floor)))
+        bassEnhancerFloorText = valueLabel()
+        panel.addView(bassEnhancerFloorText)
+        bassEnhancerFloorSeek = SeekBar(this).apply {
+            max = 110
+            contentDescription = getString(R.string.bass_enhancer_floor)
+            progress = (bassEnhancerSettings.floorHz.toInt() - 10).coerceIn(0, 110)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress + 10
+                bassEnhancerFloorText.text = getString(R.string.bass_enhancer_floor_value, value)
+                updateBassEnhancer(bassEnhancerSettings.copy(floorHz = value.toFloat()))
+            })
+        }
+        panel.addView(bassEnhancerFloorSeek)
+
+        panel.addView(sectionTitle(getString(R.string.bass_enhancer_blend)))
+        bassEnhancerBlendText = valueLabel()
+        panel.addView(bassEnhancerBlendText)
+        bassEnhancerBlendSeek = SeekBar(this).apply {
+            max = 20
+            contentDescription = getString(R.string.bass_enhancer_blend)
+            progress = (bassEnhancerSettings.blend.toInt() + 10).coerceIn(0, 20)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress - 10
+                bassEnhancerBlendText.text = getString(R.string.bass_enhancer_blend_value, value)
+                updateBassEnhancer(bassEnhancerSettings.copy(blend = value.toFloat()))
+            })
+        }
+        panel.addView(bassEnhancerBlendSeek)
+
+        bassEnhancerListenSwitch = Switch(this).apply {
+            text = getString(R.string.bass_enhancer_listen)
+            setTextColor(getColor(R.color.ee_text))
+            contentDescription = getString(R.string.bass_enhancer_listen)
+            isChecked = bassEnhancerSettings.listen
+            setOnCheckedChangeListener { _, checked ->
+                if (!updatingControls) updateBassEnhancer(bassEnhancerSettings.copy(listen = checked))
+            }
+        }
+        panel.addView(bassEnhancerListenSwitch)
+
+        panel.addView(sectionTitle(getString(R.string.bass_enhancer_gains)))
+        bassEnhancerInputGainText = valueLabel()
+        panel.addView(bassEnhancerInputGainText)
+        bassEnhancerInputGainSeek = SeekBar(this).apply {
+            max = 720
+            contentDescription = getString(R.string.bass_enhancer_input_gain)
+            progress = ((bassEnhancerSettings.inputGainDb + 36f) * 10f).toInt().coerceIn(0, 720)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress / 10f - 36f
+                bassEnhancerInputGainText.text = getString(R.string.bass_enhancer_input_gain_value, value)
+                updateBassEnhancer(bassEnhancerSettings.copy(inputGainDb = value))
+            })
+        }
+        panel.addView(bassEnhancerInputGainSeek)
+        bassEnhancerOutputGainText = valueLabel()
+        panel.addView(bassEnhancerOutputGainText)
+        bassEnhancerOutputGainSeek = SeekBar(this).apply {
+            max = 720
+            contentDescription = getString(R.string.bass_enhancer_output_gain)
+            progress = ((bassEnhancerSettings.outputGainDb + 36f) * 10f).toInt().coerceIn(0, 720)
+            setOnSeekBarChangeListener(seekListener { progress ->
+                val value = progress / 10f - 36f
+                bassEnhancerOutputGainText.text = getString(R.string.bass_enhancer_output_gain_value, value)
+                updateBassEnhancer(bassEnhancerSettings.copy(outputGainDb = value))
+            })
+        }
+        panel.addView(bassEnhancerOutputGainSeek)
+
+        panel.addView(sectionTitle(getString(R.string.actions)))
+        panel.addView(textAction(getString(R.string.bass_enhancer_reset_settings)) {
+            updateBassEnhancer(BassEnhancerSettings())
+            refreshBassEnhancerControls()
+            showMessage(getString(R.string.bass_enhancer_settings_reset))
+        })
+        refreshBassEnhancerControls()
+    }
+
+    private fun updateBassEnhancer(settings: BassEnhancerSettings) {
+        bassEnhancerSettings = settings
+        bassEnhancerPreview.apply(settings)
+        BassEnhancerSettingsStore.save(this, settings)
+        refreshBassEnhancerStatus()
+    }
+
+    private fun refreshBassEnhancerControls() {
+        if (!::bassEnhancerAmountSeek.isInitialized) return
+        updatingControls = true
+        bassEnhancerBypassSwitch.isChecked = bassEnhancerSettings.bypass
+        bassEnhancerFloorActiveSwitch.isChecked = bassEnhancerSettings.floorActive
+        bassEnhancerListenSwitch.isChecked = bassEnhancerSettings.listen
+        bassEnhancerFloorSeek.isEnabled = bassEnhancerSettings.floorActive
+        bassEnhancerAmountText.text = getString(R.string.bass_enhancer_amount_value, bassEnhancerSettings.amountDb)
+        bassEnhancerAmountSeek.progress = ((bassEnhancerSettings.amountDb + 100f) * 10f).toInt().coerceIn(0, 1360)
+        bassEnhancerHarmonicsText.text = getString(R.string.bass_enhancer_harmonics_value, bassEnhancerSettings.harmonics)
+        bassEnhancerHarmonicsSeek.progress = ((bassEnhancerSettings.harmonics - 0.1f) * 10f).toInt().coerceIn(0, 99)
+        bassEnhancerScopeText.text = getString(R.string.bass_enhancer_scope_value, bassEnhancerSettings.scopeHz.toInt())
+        bassEnhancerScopeSeek.progress = (bassEnhancerSettings.scopeHz.toInt() - 10).coerceIn(0, 240)
+        bassEnhancerFloorText.text = getString(R.string.bass_enhancer_floor_value, bassEnhancerSettings.floorHz.toInt())
+        bassEnhancerFloorSeek.progress = (bassEnhancerSettings.floorHz.toInt() - 10).coerceIn(0, 110)
+        bassEnhancerBlendText.text = getString(R.string.bass_enhancer_blend_value, bassEnhancerSettings.blend.toInt())
+        bassEnhancerBlendSeek.progress = (bassEnhancerSettings.blend.toInt() + 10).coerceIn(0, 20)
+        bassEnhancerInputGainText.text = getString(R.string.bass_enhancer_input_gain_value, bassEnhancerSettings.inputGainDb)
+        bassEnhancerInputGainSeek.progress = ((bassEnhancerSettings.inputGainDb + 36f) * 10f).toInt().coerceIn(0, 720)
+        bassEnhancerOutputGainText.text = getString(R.string.bass_enhancer_output_gain_value, bassEnhancerSettings.outputGainDb)
+        bassEnhancerOutputGainSeek.progress = ((bassEnhancerSettings.outputGainDb + 36f) * 10f).toInt().coerceIn(0, 720)
+        updatingControls = false
+    }
+
+    private fun refreshBassEnhancerStatus() {
+        if (!::bassEnhancerStatus.isInitialized) return
+        bassEnhancerStatus.text = if (bassEnhancerPreview.isRunning) {
+            getString(R.string.bass_enhancer_status_playing, bassEnhancerPreview.renderedFrames)
+        } else {
+            getString(R.string.bass_enhancer_status_stopped)
+        }
+        if (::bassEnhancerPlaySwitch.isInitialized && bassEnhancerPlaySwitch.isChecked != bassEnhancerPreview.isRunning) {
+            updatingControls = true
+            bassEnhancerPlaySwitch.isChecked = bassEnhancerPreview.isRunning
+            updatingControls = false
+        }
+    }
+
+    private fun refreshBassEnhancerMeters() {
+        if (!::bassEnhancerMeters.isInitialized) return
+        val levels = bassEnhancerPreview.levels()
+        bassEnhancerMeters.text = getString(
+            R.string.bass_enhancer_meters,
+            levels.inputLeftDb,
+            levels.inputRightDb,
+            levels.outputLeftDb,
+            levels.outputRightDb,
+            levels.harmonicsLevelDb,
         )
     }
 

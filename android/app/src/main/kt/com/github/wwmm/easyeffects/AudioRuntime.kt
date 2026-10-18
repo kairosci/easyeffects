@@ -20,6 +20,8 @@ internal object AudioRuntime {
         private set
     lateinit var autogainPreview: NativeAutogainPreview
         private set
+    lateinit var bassEnhancerPreview: NativeBassEnhancerPreview
+        private set
 
     fun initialize(context: Context) {
         if (!::nativeEqualizer.isInitialized) {
@@ -29,6 +31,7 @@ internal object AudioRuntime {
             platformEffects = AndroidPlatformEffects(context.applicationContext, nativeEqualizer)
             dynamicsProcessing = AndroidDynamicsProcessing(context.applicationContext, nativeEqualizer)
             autogainPreview = NativeAutogainPreview()
+            bassEnhancerPreview = NativeBassEnhancerPreview()
         }
     }
 

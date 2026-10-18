@@ -61,13 +61,23 @@ needed to confirm audible output and that the meters track the target. Global
 processing of other apps' playback remains unavailable to ordinary apps, so
 Autogain stays app-owned.
 
+The Bass Enhancer screen reuses that app-owned AAudio category. It opens an
+output stream, generates a 60 Hz stereo tone in the native callback, runs the
+ported `BassEnhancerProcessor` (Calf Bass Enhancer DSP) on it, and republishes
+input/output peak and peak-hold harmonics meters. Every screen control maps to
+the desktop parameter set and acts on this DSP backend. A debug-only
+`runBassEnhancerPreviewTest` intent runs the preview and checks that it rendered
+at least one second of frames and produced finite non-silent output with
+saturation harmonics. Global processing of other apps' playback remains
+unavailable to ordinary apps, so Bass Enhancer stays app-owned too.
+
 ## Desktop plugin inventory
 
 | Desktop plugin | Android integration plan | State |
 | --- | --- | --- |
 | Autogain | Vendored libebur128 1.2.6 and portable C++ desktop DSP port (references, target, silence, history, force silence, ceiling, gains, bypass, meters) with host tests; Android screen drives an app-owned AAudio preview tone through the DSP | DSP + app-owned preview implemented; output tap still unavailable to ordinary apps |
 | Autotune | Port pitch detector/correction DSP to C++; requires global PCM route | Blocked by output tap |
-| Bass Enhancer | Android `BassBoost` is only a device dependent approximation | Partial system effect |
+| Bass Enhancer | Calf Bass Enhancer DSP (lowpass split, TAP saturation with 2x oversampling, optional highpass floor), desktop parameter mapping, common gains, bypass, reset, and level/harmonics meters implemented with host tests; Android screen drives an app-owned AAudio preview through the DSP | DSP + app-owned preview implemented; output tap unavailable to ordinary apps |
 | Bass Loudness | MDA/Stevens-Davis contour model, desktop dB-to-LV2 mapping, link, bypass, common gains, and C++ tests implemented | DSP partial; Android screen and system route unavailable |
 | Compressor | Map to `DynamicsProcessing.MbcBand` and expose supported controls | Partial Android stage; API 28+ |
 | Convolver | Port the C++ convolution engine and URI based IR loading; requires global PCM route | Blocked by output tap |
@@ -120,7 +130,7 @@ Autogain stays app-owned.
    debug JNI check now verifies this lifecycle separately from EQ activation.
    Pixel 7a returned PASS for all four mapped stages and for Compressor running
    with the global EQ disabled.
-4. **Portable DSP ports — Crossfeed, Crusher, Delay, Crosstalk Canceller, Bass Loudness, and Autogain implemented; Mid/Side IIR core added; C++ tests pass.**
+4. **Portable DSP ports — Crossfeed, Crusher, Delay, Crosstalk Canceller, Bass Loudness, Bass Enhancer, and Autogain implemented; Mid/Side IIR core added; C++ tests pass.**
    Crossfeed uses upstream libbs2b 3.1.0; Crusher follows Calf's LGPL DSP
    algorithms; Delay follows the LSP plugin control set; Crosstalk Canceller
    uses the desktop's fitted six-filter correction. Mid/Side has linked/split
@@ -133,6 +143,10 @@ Autogain stays app-owned.
    target, silence, maximum-history, force-silence, ceiling, gain, bypass, reset,
    and meter behavior; its Android screen drives an app-owned AAudio preview, so
    the controls run a real DSP backend while global routing stays blocked.
+   Bass Enhancer ports Calf's lowpass split, TAP saturation with 2x oversampling,
+   optional highpass floor, blend, wet/dry amount, listen, common gains, bypass,
+   reset, and peak-hold harmonics meter; it uses the same app-owned AAudio preview
+   screen pattern as Autogain.
 5. **Portable desktop DSP ports.** Extract or port the remaining algorithms one at a time to
    C++20 with no Linux/PipeWire dependency. Add dedicated C++ tests and numerical
    comparison fixtures against desktop implementations.

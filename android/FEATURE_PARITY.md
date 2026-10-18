@@ -14,7 +14,7 @@ plugin unless its DSP and behavior are shown to match.
 | --- | --- |
 | Autogain | Desktop ITU-R BS.1770 loudness measurement with vendored libebur128 1.2.6, reference modes, target, silence, maximum history, force silence, peak ceiling, attack/release, common gains, bypass, reset, and level meters implemented and tested in C++; Android screen drives an app-owned AAudio preview of the ported DSP; global system route unavailable to ordinary Android apps |
 | Autotune | Not implemented |
-| Bass Enhancer | Not implemented |
+| Bass Enhancer | Calf Bass Enhancer DSP (lowpass split, TAP saturation with 2x oversampling, optional highpass floor), desktop parameter mapping, common gains, bypass, reset, and level/harmonics meters implemented and tested in C++; Android screen drives an app-owned AAudio preview of the ported DSP; global system route unavailable to ordinary Android apps |
 | Bass Loudness | MDA equal-loudness contour DSP, desktop parameter mapping, Link, bypass, and common gains implemented in C++; Android plugin screen and global route pending |
 | Compressor | Reduced Android `DynamicsProcessing` stage; independent desktop C++ processor and full controls pending |
 | Convolver | Not implemented |
@@ -77,6 +77,20 @@ currently platform-specific controls, not desktop plugin parity. Their global
 session behavior is vendor dependent. Each desktop plugin still requires its
 own C++ processor, parameters, activator, preset mapping, and verification.
 
+The Bass Enhancer port reproduces Calf's Bass Enhancer DSP: the two-cascaded
+lowpass split (`Scope`), the TAP saturation stage with its 2x oversampling
+filters and peak-hold `Harmonics` meter, the optional highpass `Floor`, the
+`Blend` harmonic balance, `Amount` wet mix, `Listen` monitoring, common gains,
+bypass and reset, with the desktop kcfg ranges. Its host C++ tests cover range
+clamping, sample-rate validation, bypass, dry-mix passthrough, the lowpass and
+highpass responses, saturation metering and its decay, and callback block
+stability. The Android Bass Enhancer screen drives the same app-owned AAudio
+preview category as Autogain: the app generates its own 60 Hz stereo tone and
+runs it through the ported C++ DSP, so every control acts on a real backend. It
+does not transform other apps' playback; that remains blocked by the platform
+boundary below. The preview engine compiles into both ABIs but has not yet been
+run on a device here.
+
 On Android devices where `DynamicsProcessing` is available, compressor,
 expander, gate, and limiter controls currently map to reduced shared Android
 stages. Their C++ backend can keep those stages active while the EQ curve is
@@ -117,6 +131,13 @@ that the meter readings track the target. A debug-only `runAutogainPreviewTest`
 intent runs the preview for up to eight seconds and reports whether the measured
 output gain converged to the target within 1.5 dB.
 
+The Bass Enhancer screen reuses the same app-owned preview: its toggle generates a
+60 Hz stereo tone in the native callback, runs the ported `BassEnhancerProcessor`
+on it, and prints input/output peak and peak-hold harmonics meters. A debug-only
+`runBassEnhancerPreviewTest` intent runs the preview and reports whether it
+rendered at least one second of frames and produced finite non-silent output with
+saturation harmonics. No device run is recorded here.
+
 To repeat the device check with a connected Pixel 7a, build the debug APK and
 launch the C++ check from the app:
 
@@ -125,8 +146,8 @@ cd android
 ANDROID_HOME=/path/to/Android/Sdk ./gradlew :app:assembleDebug
 /path/to/Android/Sdk/platform-tools/adb install -r app/build/outputs/apk/debug/app-debug.apk
 /path/to/Android/Sdk/platform-tools/adb shell am force-stop com.github.wwmm.easyeffects
-/path/to/Android/Sdk/platform-tools/adb shell am start -n com.github.wwmm.easyeffects/.MainActivity --ez runCppBackendChecks true --ez runPcmPlaybackTest true --ez runAutogainPreviewTest true
-/path/to/Android/Sdk/platform-tools/adb logcat -s EasyEffectsNativeTests:I EasyEffectsPcmPreview:I EasyEffectsAutogainPreview:I
+/path/to/Android/Sdk/platform-tools/adb shell am start -n com.github.wwmm.easyeffects/.MainActivity --ez runCppBackendChecks true --ez runPcmPlaybackTest true --ez runAutogainPreviewTest true --ez runBassEnhancerPreviewTest true
+/path/to/Android/Sdk/platform-tools/adb logcat -s EasyEffectsNativeTests:I EasyEffectsPcmPreview:I EasyEffectsAutogainPreview:I EasyEffectsBassEnhancerPreview:I
 ```
 
 Before running, turn off any enabled Android platform or DynamicsProcessing
