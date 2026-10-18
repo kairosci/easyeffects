@@ -1,0 +1,13 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="export_apo">Предварително задаване</string>
+    <string name="reset">Нулиране</string>
+    <string name="frequency">Честота</string>
+    <string name="gain">Gain</string>
+    <string name="filter_all_pass">Глобален Bypass</string>
+    <string name="filter_off">Изключено</string>
+    <string name="presets">Профили</string>
+    <string name="android_dynamics_compressor">Аудио компресор</string>
+</resources>

@@ -1,0 +1,16 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <style name="Theme.EasyEffects" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ee_background</item>
+        <item name="android:colorAccent">@color/ee_accent</item>
+        <item name="android:textColorPrimary">@color/ee_text</item>
+        <item name="android:textColorSecondary">@color/ee_text_secondary</item>
+        <item name="android:statusBarColor">@color/ee_background</item>
+        <item name="android:navigationBarColor">@color/ee_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:seekBarStyle">@android:style/Widget.Material.SeekBar</item>
+        <item name="android:fontFamily">sans</item>
+    </style>
+</resources>

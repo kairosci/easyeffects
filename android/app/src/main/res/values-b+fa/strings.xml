@@ -1,0 +1,35 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">اکولایزر</string>
+    <string name="controls">کنترل ها</string>
+    <string name="bands">باندها</string>
+    <string name="band">باندها</string>
+    <string name="flat_response">پاسخ مسطح</string>
+    <string name="calculate_frequencies">محاسبه فرکانس‌ها</string>
+    <string name="import_preset">واردات</string>
+    <string name="import_apo_graphiceq">وارد کردن فایل پیش‌تنظیم GraphicEQ</string>
+    <string name="export_apo">صادرات از پیش تعیین شده</string>
+    <string name="sort_bands">دسته بندی باندها</string>
+    <string name="reset">بازنشانی</string>
+    <string name="solo">انفرادی</string>
+    <string name="enabled">فعال شد</string>
+    <string name="frequency">فرکانس</string>
+    <string name="gain">افزایش</string>
+    <string name="quality">کیفیت</string>
+    <string name="filter_peaking">زنگ</string>
+    <string name="filter_low_shelf">پایین-قفسه</string>
+    <string name="filter_high_shelf">بالا-قفسه</string>
+    <string name="filter_low_pass">پایین-گذر</string>
+    <string name="filter_high_pass">بالا-گذر</string>
+    <string name="filter_band_pass">باند دور زدن</string>
+    <string name="filter_notch">شکاف</string>
+    <string name="filter_all_pass">دور زدن</string>
+    <string name="filter_off">خاموش</string>
+    <string name="presets">تنظیمات از پیش تعیین شده</string>
+    <string name="android_dynamics_compressor">کمپرسور</string>
+    <string name="android_dynamics_expander">گسترش دهنده</string>
+    <string name="android_dynamics_gate">دروازه</string>
+    <string name="android_dynamics_limiter">محدود کننده</string>
+</resources>

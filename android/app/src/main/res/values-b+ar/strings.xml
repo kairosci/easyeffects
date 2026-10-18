@@ -1,0 +1,17 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="controls">ضوابط</string>
+    <string name="import_preset">استورد إعدادًا مسبقًا</string>
+    <string name="export_apo">صدر إعدادًا مسبقًا</string>
+    <string name="reset">إعادة تعيين</string>
+    <string name="enabled">ممكن</string>
+    <string name="gain">التضخيم</string>
+    <string name="quality">الجودة</string>
+    <string name="filter_band_pass">تخطي</string>
+    <string name="filter_all_pass">تخطي</string>
+    <string name="filter_off">مطفي</string>
+    <string name="presets">الإعدادات المسبقة</string>
+    <string name="android_dynamics_compressor">الضاغط الصوتي</string>
+</resources>

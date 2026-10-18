@@ -1,0 +1,25 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="bands">Bandak</string>
+    <string name="band">Bandak</string>
+    <string name="flat_response">Erantzun laua</string>
+    <string name="calculate_frequencies">Kalkulatu maiztasunak</string>
+    <string name="import_preset">Inportatu aurrezarpena</string>
+    <string name="export_apo">Inportatu aurrezarpena</string>
+    <string name="sort_bands">Ordenatu bandak</string>
+    <string name="reset">Berrezarri</string>
+    <string name="frequency">Maiztasuna</string>
+    <string name="gain">Irabazia</string>
+    <string name="quality">Kalitatea</string>
+    <string name="filter_high_shelf">Pasaera altua</string>
+    <string name="filter_low_pass">Pasaera baxua</string>
+    <string name="filter_high_pass">Pasaera altua</string>
+    <string name="filter_band_pass">Bandak</string>
+    <string name="filter_all_pass">Deribazioa</string>
+    <string name="filter_off">Desaktibatuta</string>
+    <string name="presets">Aurrezarpenak</string>
+    <string name="android_dynamics_compressor">Konpresorea</string>
+    <string name="android_dynamics_gate">Atea</string>
+</resources>

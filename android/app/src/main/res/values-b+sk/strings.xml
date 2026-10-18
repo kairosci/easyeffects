@@ -1,0 +1,34 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Ekvalizér</string>
+    <string name="controls">Ovládač zosilnenia</string>
+    <string name="bands">Pásma</string>
+    <string name="band">Pásma</string>
+    <string name="flat_response">Vyhladiť</string>
+    <string name="calculate_frequencies">Vypočítať frekvencie</string>
+    <string name="import_preset">Importovať model</string>
+    <string name="import_apo_graphiceq">Načítať APO predvoľbu</string>
+    <string name="export_apo">Načítať predvoľbu</string>
+    <string name="sort_bands">Pásma</string>
+    <string name="reset">Obnoviť pôvodné hodnoty</string>
+    <string name="solo">Sólo</string>
+    <string name="enabled">Povolené</string>
+    <string name="frequency">Frekvencia</string>
+    <string name="gain">Zisk</string>
+    <string name="quality">Kvalita</string>
+    <string name="filter_peaking">Zvonček</string>
+    <string name="filter_low_shelf">Spodný prah</string>
+    <string name="filter_high_shelf">Horný prah</string>
+    <string name="filter_low_pass">Dolná priepusť</string>
+    <string name="filter_high_pass">Horné pásmo</string>
+    <string name="filter_band_pass">Premostiť</string>
+    <string name="filter_notch">Zárez</string>
+    <string name="filter_all_pass">Premostiť</string>
+    <string name="filter_off">Vyp</string>
+    <string name="presets">Predvoľby</string>
+    <string name="android_dynamics_compressor">Kompresor</string>
+    <string name="android_dynamics_gate">Brána</string>
+    <string name="android_dynamics_limiter">Obmedzovač</string>
+</resources>

@@ -1,0 +1,8 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="controls">Controls</string>
+    <string name="reset">Reinicialitzar</string>
+    <string name="android_dynamics_compressor">Compressor</string>
+</resources>

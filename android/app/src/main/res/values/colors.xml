@@ -1,0 +1,22 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <color name="ic_launcher_background">#202326</color>
+    <color name="ee_background">#202326</color>
+    <color name="ee_surface">#1F1F1F</color>
+    <color name="ee_surface_raised">#292C30</color>
+    <color name="ee_accent">#4C9AB8</color>
+    <color name="ee_accent_pressed">#367C99</color>
+    <color name="ee_selected">#294D61</color>
+    <color name="ee_curve_left">#22D478</color>
+    <color name="ee_text">#F2F2F2</color>
+    <color name="ee_text_secondary">#ABABAB</color>
+    <color name="ee_text_muted">#8F8F8F</color>
+    <color name="ee_outline">#4B4E52</color>
+    <color name="ee_curve_right">#69C99D</color>
+    <color name="ee_curve_point">#22D478</color>
+    <color name="ee_curve_selected">#F2F2F2</color>
+    <color name="ee_grid">#484848</color>
+    <color name="ee_ripple">#334C9AB8</color>
+</resources>

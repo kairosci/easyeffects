@@ -1,0 +1,18 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M34,29L34,79M54,21L54,87M74,34L74,78"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="square"
+        android:strokeWidth="5" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M42,47A8,8 0,1 1,26 47A8,8 0,1 1,42 47M62,65A8,8 0,1 1,46 65A8,8 0,1 1,62 65M82,43A8,8 0,1 1,66 43A8,8 0,1 1,82 43" />
+</vector>

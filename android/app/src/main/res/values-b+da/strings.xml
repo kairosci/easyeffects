@@ -1,0 +1,30 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="bands">Bånd</string>
+    <string name="band">Bånd</string>
+    <string name="flat_response">Flad Respons</string>
+    <string name="calculate_frequencies">Beregn Frekvenser</string>
+    <string name="import_preset">Import Model</string>
+    <string name="import_apo_graphiceq">Import APO Forindstillingsfil</string>
+    <string name="export_apo">Import Forudindstilling</string>
+    <string name="sort_bands">Bånd</string>
+    <string name="reset">Nustil</string>
+    <string name="solo">Solo</string>
+    <string name="enabled">Aktiveret</string>
+    <string name="frequency">Frekvens</string>
+    <string name="gain">Gain</string>
+    <string name="quality">Kvalitet</string>
+    <string name="filter_peaking">Klokke</string>
+    <string name="filter_low_shelf">Lav Hylde</string>
+    <string name="filter_high_shelf">Høj Hylde</string>
+    <string name="filter_low_pass">Lavpas</string>
+    <string name="filter_high_pass">Højpas</string>
+    <string name="filter_band_pass">Bånd Omgåelse</string>
+    <string name="filter_notch">Indhak</string>
+    <string name="filter_all_pass">Omgåelse</string>
+    <string name="filter_off">Slukket</string>
+    <string name="presets">Forindstillinger</string>
+    <string name="android_dynamics_compressor">Kompressor</string>
+</resources>

@@ -1,0 +1,10 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M12,2a10,10 0,1 0,0 20a10,10 0,0 0,0 -20zM13,17h-2v-6h2zM12,9.2a1.2,1.2 0,1 1,0 -2.4a1.2,1.2 0,0 1,0 2.4z" />
+</vector>

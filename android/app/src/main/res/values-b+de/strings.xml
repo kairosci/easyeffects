@@ -1,0 +1,33 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Equalizer</string>
+    <string name="controls">Steuerung</string>
+    <string name="preamp">Vorverstärker</string>
+    <string name="bands">Bereiche</string>
+    <string name="flat_response">Flacher Frequenzgang</string>
+    <string name="calculate_frequencies">Frequenzen berechnen</string>
+    <string name="import_preset">Modell importieren</string>
+    <string name="import_apo_graphiceq">GraphicEQ-Voreinstellungsdatei importieren</string>
+    <string name="export_apo">Voreinstellung exportieren</string>
+    <string name="sort_bands">Bänder sortieren</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="solo">Solo</string>
+    <string name="enabled">Aktiviert</string>
+    <string name="frequency">Frequenz</string>
+    <string name="gain">Verstärkung</string>
+    <string name="quality">Qualität</string>
+    <string name="filter_peaking">Glocke</string>
+    <string name="filter_low_shelf">Tiefen-Kuhschwanzfilter</string>
+    <string name="filter_high_shelf">Höhen-Kuhschwanzfilter</string>
+    <string name="filter_low_pass">Tiefpass</string>
+    <string name="filter_high_pass">Hochpass</string>
+    <string name="filter_notch">Badewannenfilter</string>
+    <string name="filter_off">Aus</string>
+    <string name="presets">Voreinstellungen</string>
+    <string name="android_dynamics_compressor">Kompressor</string>
+    <string name="android_dynamics_expander">Expander</string>
+    <string name="android_dynamics_gate">Gate</string>
+    <string name="android_dynamics_limiter">Limiter</string>
+</resources>

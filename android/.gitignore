@@ -1,0 +1,9 @@
+# Copyright © 2026 Wellington Wallace
+# Copyright © 2026 Alessio Attilio
+# SPDX-License-Identifier: GPL-3.0-or-later
+.gradle/
+.kotlin/
+.cxx/
+.externalNativeBuild/
+local.properties
+**/build/

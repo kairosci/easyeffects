@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Cothromóir</string>
+    <string name="controls">Rialuithe</string>
+    <string name="preamp">Réamh-aimplitheoir</string>
+    <string name="bands">Bannaí Ceoil</string>
+    <string name="band">Banna</string>
+    <string name="flat_response">Freagra cothrom</string>
+    <string name="calculate_frequencies">Ríomh minicíochtaí</string>
+    <string name="import_preset">Iompórtáil APO</string>
+    <string name="import_apo_graphiceq">Iompórtáil APO (GraphicEQ)</string>
+    <string name="export_apo">Easpórtáil APO</string>
+    <string name="sort_bands">Sórtáil bannaí</string>
+    <string name="reset">Athshocraigh</string>
+    <string name="solo">Níl ann ach</string>
+    <string name="enabled">Cumasaithe</string>
+    <string name="frequency">Minicíocht</string>
+    <string name="gain">Gnóthachan</string>
+    <string name="quality">Cáilíocht</string>
+    <string name="filter_peaking">Cloigín</string>
+    <string name="filter_low_shelf">Seilf íseal</string>
+    <string name="filter_high_shelf">Ard-seilf</string>
+    <string name="filter_low_pass">Íseal-phas</string>
+    <string name="filter_high_pass">Ard-phas</string>
+    <string name="filter_band_pass">Bandpass</string>
+    <string name="filter_notch">NotchName</string>
+    <string name="filter_all_pass">Allpass</string>
+    <string name="filter_off">As</string>
+    <string name="presets">Réamhshocruithe</string>
+    <string name="android_dynamics_compressor">Comhbhrúiteoir</string>
+    <string name="android_dynamics_expander">Fairsingitheoir</string>
+    <string name="android_dynamics_gate">Geata</string>
+    <string name="android_dynamics_limiter">Teorainn</string>
+</resources>

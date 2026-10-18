@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Эквалайзер</string>
+    <string name="controls">Элементы управления</string>
+    <string name="preamp">Предусилитель</string>
+    <string name="bands">Число полос</string>
+    <string name="band">Полоса</string>
+    <string name="flat_response">Линейная АЧХ</string>
+    <string name="calculate_frequencies">Расчёт частот</string>
+    <string name="import_preset">Импорт APO</string>
+    <string name="import_apo_graphiceq">Импорт APO (GraphicEQ)</string>
+    <string name="export_apo">Экспорт APO</string>
+    <string name="sort_bands">Сортировка полос</string>
+    <string name="reset">Сброс</string>
+    <string name="solo">Соло</string>
+    <string name="enabled">Включено</string>
+    <string name="frequency">Частота</string>
+    <string name="gain">Усиление</string>
+    <string name="quality">Качество</string>
+    <string name="filter_peaking">Колокол</string>
+    <string name="filter_low_shelf">Полочный ФНЧ</string>
+    <string name="filter_high_shelf">Полочный ФВЧ</string>
+    <string name="filter_low_pass">Фильтр НЧ</string>
+    <string name="filter_high_pass">Фильтр ВЧ</string>
+    <string name="filter_band_pass">Полосовой фильтр</string>
+    <string name="filter_notch">Вырез</string>
+    <string name="filter_all_pass">Всепропускающий фильтр</string>
+    <string name="filter_off">Отключено</string>
+    <string name="presets">Предустановки</string>
+    <string name="android_dynamics_compressor">Компрессор</string>
+    <string name="android_dynamics_expander">Расширитель</string>
+    <string name="android_dynamics_gate">Шлюз (гейт)</string>
+    <string name="android_dynamics_limiter">Ограничитель (лимитер)</string>
+</resources>

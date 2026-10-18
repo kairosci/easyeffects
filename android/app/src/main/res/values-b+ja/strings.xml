@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">イコライザー</string>
+    <string name="controls">コントロール</string>
+    <string name="preamp">プリアンプ</string>
+    <string name="bands">バンド</string>
+    <string name="band">バンド</string>
+    <string name="flat_response">フラットレスポンス</string>
+    <string name="calculate_frequencies">周波数計算</string>
+    <string name="import_preset">APO をインポート</string>
+    <string name="import_apo_graphiceq">APO (GraphicEQ) をインポート</string>
+    <string name="export_apo">APO をエクスポート</string>
+    <string name="sort_bands">バンド並べ替え</string>
+    <string name="reset">リセット</string>
+    <string name="solo">ソロ</string>
+    <string name="enabled">有効</string>
+    <string name="frequency">周波数</string>
+    <string name="gain">ゲイン</string>
+    <string name="quality">Q値</string>
+    <string name="filter_peaking">ベル</string>
+    <string name="filter_low_shelf">ローシェルフ</string>
+    <string name="filter_high_shelf">ハイシェルフ</string>
+    <string name="filter_low_pass">ローパス</string>
+    <string name="filter_high_pass">ハイパス</string>
+    <string name="filter_band_pass">バンドパス</string>
+    <string name="filter_notch">ノッチ</string>
+    <string name="filter_all_pass">オールパス</string>
+    <string name="filter_off">オフ</string>
+    <string name="presets">プリセット</string>
+    <string name="android_dynamics_compressor">コンプレッサー</string>
+    <string name="android_dynamics_expander">エキスパンダー</string>
+    <string name="android_dynamics_gate">ゲート</string>
+    <string name="android_dynamics_limiter">リミッター</string>
+</resources>

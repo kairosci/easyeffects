@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">சமநிலைப்படுத்தி</string>
+    <string name="controls">கட்டுப்பாடுகள்</string>
+    <string name="preamp">முன்பெருக்கி</string>
+    <string name="bands">பட்டைகள்</string>
+    <string name="band">பட்டை</string>
+    <string name="flat_response">தட்டையான பதில்</string>
+    <string name="calculate_frequencies">அதிர்வெண்களைக் கணக்கிடுங்கள்</string>
+    <string name="import_preset">இருந்து இறக்குமதி</string>
+    <string name="import_apo_graphiceq">இறக்குமதி APO (GraphicEQ)</string>
+    <string name="export_apo">ஏற்றுமதி APO</string>
+    <string name="sort_bands">பட்டைகளை வரிசைப்படுத்துங்கள்</string>
+    <string name="reset">மீட்டமை</string>
+    <string name="solo">தனி</string>
+    <string name="enabled">இயக்கப்பட்டது</string>
+    <string name="frequency">மீடிறன், மீள்திறன், நிகழ்வெண், நிகழ்வு</string>
+    <string name="gain">பெருக்கம்</string>
+    <string name="quality">தகுதி</string>
+    <string name="filter_peaking">மணி</string>
+    <string name="filter_low_shelf">குறைந்த அலமாரி</string>
+    <string name="filter_high_shelf">உயர் அலமாரி</string>
+    <string name="filter_low_pass">லோ-பாச்</string>
+    <string name="filter_high_pass">உயர் பாச்</string>
+    <string name="filter_band_pass">பட்டைவிடு</string>
+    <string name="filter_notch">உச்சநிலை</string>
+    <string name="filter_all_pass">ஆல்பாச்</string>
+    <string name="filter_off">அணை</string>
+    <string name="presets">முன்னமைவுகள்</string>
+    <string name="android_dynamics_compressor">காற்றமுக்கி</string>
+    <string name="android_dynamics_expander">விரிவாக்க</string>
+    <string name="android_dynamics_gate">வாயில்</string>
+    <string name="android_dynamics_limiter">லிமிட்டர்</string>
+</resources>

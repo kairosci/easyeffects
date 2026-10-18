@@ -1,0 +1,27 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">ეკვალაიზერი</string>
+    <string name="bands">გუნდები</string>
+    <string name="band">გუნდები</string>
+    <string name="import_preset">შემოტანა</string>
+    <string name="export_apo">პრესეტის გატანა</string>
+    <string name="reset">დაბრუნება</string>
+    <string name="solo">სოლო</string>
+    <string name="enabled">ჩართულია</string>
+    <string name="frequency">სიხშირე</string>
+    <string name="gain">გაძლიერება</string>
+    <string name="quality">ხარისხი</string>
+    <string name="filter_peaking">ზარი</string>
+    <string name="filter_high_shelf">მაღალსიხშირული ფილტრი</string>
+    <string name="filter_low_pass">დაბალსიხშირული ფილტრი</string>
+    <string name="filter_high_pass">მაღალსიხშირული ფილტრი</string>
+    <string name="filter_band_pass">გუნდი-პასი</string>
+    <string name="filter_notch">ამოკვეთა</string>
+    <string name="filter_off">გამორთ</string>
+    <string name="presets">პრესეტები</string>
+    <string name="android_dynamics_compressor">კომპრესორი</string>
+    <string name="android_dynamics_gate">გეითი</string>
+    <string name="android_dynamics_limiter">შემზღუდველი</string>
+</resources>

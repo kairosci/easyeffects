@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Equalizer</string>
+    <string name="controls">Kontrol</string>
+    <string name="preamp">Prapenguat</string>
+    <string name="bands">Pita</string>
+    <string name="band">Pita</string>
+    <string name="flat_response">Respons datar</string>
+    <string name="calculate_frequencies">Hitung frekuensi</string>
+    <string name="import_preset">Impor APO</string>
+    <string name="import_apo_graphiceq">Impor APO (GraphicEQ)</string>
+    <string name="export_apo">Ekspor APO</string>
+    <string name="sort_bands">Urutkan pita</string>
+    <string name="reset">Atur ulang</string>
+    <string name="solo">Solo</string>
+    <string name="enabled">Diaktifkan</string>
+    <string name="frequency">Frekuensi</string>
+    <string name="gain">Penguatan</string>
+    <string name="quality">Kualitas</string>
+    <string name="filter_peaking">Lonceng</string>
+    <string name="filter_low_shelf">Rak-rendah</string>
+    <string name="filter_high_shelf">Rak-tinggi</string>
+    <string name="filter_low_pass">Lewat-rendah</string>
+    <string name="filter_high_pass">Lewat-tinggi</string>
+    <string name="filter_band_pass">Lewat-pita</string>
+    <string name="filter_notch">Takik</string>
+    <string name="filter_all_pass">Semua lewat</string>
+    <string name="filter_off">Mati</string>
+    <string name="presets">Preset</string>
+    <string name="android_dynamics_compressor">Kompresor</string>
+    <string name="android_dynamics_expander">Ekspander</string>
+    <string name="android_dynamics_gate">Gerbang</string>
+    <string name="android_dynamics_limiter">Pembatas</string>
+</resources>

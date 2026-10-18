@@ -1,0 +1,25 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Utjämnare</string>
+    <string name="band">Lågt band</string>
+    <string name="flat_response">Platt respons</string>
+    <string name="import_preset">Importmodell</string>
+    <string name="import_apo_graphiceq">Importera GraphicEQ-förinställd fil</string>
+    <string name="export_apo">Importera förinställning</string>
+    <string name="sort_bands">Underband</string>
+    <string name="reset">Återställ</string>
+    <string name="enabled">Aktiverad</string>
+    <string name="frequency">Frekvens (Hz)</string>
+    <string name="gain">Förstärkning</string>
+    <string name="quality">Kvalitet</string>
+    <string name="filter_low_shelf">Låg hylla</string>
+    <string name="filter_high_shelf">Hög hylla</string>
+    <string name="filter_low_pass">Lågpass</string>
+    <string name="filter_high_pass">Högpass</string>
+    <string name="filter_band_pass">Förbikoppling av band 1</string>
+    <string name="presets">Profiler</string>
+    <string name="android_dynamics_compressor">Kompressor</string>
+    <string name="android_dynamics_limiter">Begränsare</string>
+</resources>

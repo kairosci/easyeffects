@@ -1,0 +1,34 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Ecualizador</string>
+    <string name="controls">Controlador de ganancia</string>
+    <string name="bands">Bandas</string>
+    <string name="band">Bandas</string>
+    <string name="flat_response">Resposta plana</string>
+    <string name="calculate_frequencies">Calcular frecuencias</string>
+    <string name="import_preset">Importar modelo</string>
+    <string name="import_apo_graphiceq">Importar ficheiro de preconfiguracións de APO</string>
+    <string name="export_apo">Importar preconfiguración</string>
+    <string name="sort_bands">Ordealas Bandas</string>
+    <string name="reset">Restabelecer</string>
+    <string name="solo">Solo</string>
+    <string name="enabled">Activado</string>
+    <string name="frequency">Frecuencia</string>
+    <string name="gain">Ganancia</string>
+    <string name="quality">Calidade</string>
+    <string name="filter_peaking">Campaíña</string>
+    <string name="filter_low_shelf">Andel baixo</string>
+    <string name="filter_high_shelf">Andel alto</string>
+    <string name="filter_low_pass">Frecuencias baixas</string>
+    <string name="filter_high_pass">Paso alto</string>
+    <string name="filter_band_pass">Desvío</string>
+    <string name="filter_notch">Entalla</string>
+    <string name="filter_all_pass">Desvío</string>
+    <string name="filter_off">Desactivado</string>
+    <string name="presets">Preconfiguracións</string>
+    <string name="android_dynamics_compressor">Compresor</string>
+    <string name="android_dynamics_gate">Porta</string>
+    <string name="android_dynamics_limiter">Limitador</string>
+</resources>

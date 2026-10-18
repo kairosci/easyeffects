@@ -1,0 +1,31 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="controls">Vezérlők</string>
+    <string name="bands">Sáv</string>
+    <string name="band">Sáv</string>
+    <string name="flat_response">Simítás Válasz</string>
+    <string name="calculate_frequencies">Frekvenciák Kiszámítása</string>
+    <string name="import_preset">Beállítás Importálás</string>
+    <string name="export_apo">Beállítás Exportálása</string>
+    <string name="sort_bands">Sávok Rendezése</string>
+    <string name="reset">Alaphelyzet</string>
+    <string name="solo">Egyedül</string>
+    <string name="frequency">Frekvencia</string>
+    <string name="gain">Nyereség</string>
+    <string name="quality">Minőség</string>
+    <string name="filter_peaking">Harang</string>
+    <string name="filter_low_shelf">Alacsony-Perem</string>
+    <string name="filter_high_shelf">Magas-Perem</string>
+    <string name="filter_low_pass">Alul-Áteresztő</string>
+    <string name="filter_high_pass">Felül-Áteresztő</string>
+    <string name="filter_band_pass">Sáv-Átadás</string>
+    <string name="filter_notch">Fok</string>
+    <string name="filter_all_pass">Kiiktat</string>
+    <string name="filter_off">Ki</string>
+    <string name="presets">Profilok</string>
+    <string name="android_dynamics_compressor">Kompreszzor</string>
+    <string name="android_dynamics_expander">Feszítő</string>
+    <string name="android_dynamics_gate">Kapu</string>
+</resources>

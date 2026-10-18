@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Equalizer</string>
+    <string name="controls">Bediening</string>
+    <string name="preamp">Voor­versterker</string>
+    <string name="bands">Banden</string>
+    <string name="band">Band</string>
+    <string name="flat_response">Platte respons</string>
+    <string name="calculate_frequencies">Frequenties berekenen</string>
+    <string name="import_preset">APO importeren</string>
+    <string name="import_apo_graphiceq">APO (GraphicEQ) importeren</string>
+    <string name="export_apo">APO exporteren</string>
+    <string name="sort_bands">Banden sorteren</string>
+    <string name="reset">Standaard­waarden</string>
+    <string name="solo">Solo</string>
+    <string name="enabled">Ingeschakeld</string>
+    <string name="frequency">Frequentie</string>
+    <string name="gain">Versterking</string>
+    <string name="quality">Kwaliteit</string>
+    <string name="filter_peaking">Bel</string>
+    <string name="filter_low_shelf">Low-shelf</string>
+    <string name="filter_high_shelf">High-shelf</string>
+    <string name="filter_low_pass">Low-pass</string>
+    <string name="filter_high_pass">High-pass</string>
+    <string name="filter_band_pass">Band-doorlaat</string>
+    <string name="filter_notch">Inkeping</string>
+    <string name="filter_all_pass">Alles-doorlaat</string>
+    <string name="filter_off">Uit</string>
+    <string name="presets">Voor­instellingen</string>
+    <string name="android_dynamics_compressor">Compressor</string>
+    <string name="android_dynamics_expander">Uitbreider</string>
+    <string name="android_dynamics_gate">Gate</string>
+    <string name="android_dynamics_limiter">Limiter</string>
+</resources>

@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Egalizator</string>
+    <string name="controls">Controale</string>
+    <string name="preamp">Preamplificare</string>
+    <string name="bands">Benzi</string>
+    <string name="band">Bandă</string>
+    <string name="flat_response">Răspuns plat</string>
+    <string name="calculate_frequencies">Calculează frecvențele</string>
+    <string name="import_preset">Importare APO</string>
+    <string name="import_apo_graphiceq">Importare APO (GraphicEQ)</string>
+    <string name="export_apo">Exportare APO</string>
+    <string name="sort_bands">Sortează benzile</string>
+    <string name="reset">Restabilește</string>
+    <string name="solo">Solo</string>
+    <string name="enabled">Activat</string>
+    <string name="frequency">Frecvență</string>
+    <string name="gain">Câștig</string>
+    <string name="quality">Calitate</string>
+    <string name="filter_peaking">Clopot</string>
+    <string name="filter_low_shelf">Reglaj trece-jos</string>
+    <string name="filter_high_shelf">Reglaj trece-sus</string>
+    <string name="filter_low_pass">Trece-jos</string>
+    <string name="filter_high_pass">Trece-sus</string>
+    <string name="filter_band_pass">Trece-bandă</string>
+    <string name="filter_notch">Decupaj de bandă</string>
+    <string name="filter_all_pass">Trece-tot</string>
+    <string name="filter_off">Dezactivat</string>
+    <string name="presets">Preconfigurări</string>
+    <string name="android_dynamics_compressor">Compresor</string>
+    <string name="android_dynamics_expander">Expandare</string>
+    <string name="android_dynamics_gate">Nivel de trecere (poartă)</string>
+    <string name="android_dynamics_limiter">Limitator</string>
+</resources>

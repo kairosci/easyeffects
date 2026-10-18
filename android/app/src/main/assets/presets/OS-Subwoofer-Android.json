@@ -1,0 +1,23 @@
+{
+  "format": "com.github.wwmm.easyeffects.equalizer",
+  "version": 1,
+  "sourcePreset": "OS-Subwoofer",
+  "sourceProject": "EasyEffects",
+  "copyright": "Copyright © 2026 Wellington Wallace; Copyright © 2026 Alessio Attilio",
+  "license": "GPL-3.0-or-later",
+  "bandCount": 1,
+  "preampDb": -6.0,
+  "bypass": false,
+  "bands": [
+    {
+      "type": "HIGH_PASS",
+      "frequencyHz": 60.0,
+      "q": 0.707,
+      "gainDb": 0.0,
+      "enabled": true,
+      "channelMode": 0,
+      "solo": false
+    }
+  ],
+  "conversionNote": "Maps the desktop preset's 60 Hz second-order high-pass filter and -6 dB input gain. Bass Enhancer and Limiter are not mapped because Android's similarly named effects do not have equivalent processing controls."
+}

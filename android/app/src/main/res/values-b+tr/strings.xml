@@ -1,0 +1,35 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Ekolayzır</string>
+    <string name="controls">Denetimler</string>
+    <string name="bands">Bantlar</string>
+    <string name="band">Bantlar</string>
+    <string name="flat_response">Düz Yanıt</string>
+    <string name="calculate_frequencies">Frekansları Hesapla</string>
+    <string name="import_preset">İçe aktar</string>
+    <string name="import_apo_graphiceq">GraphicEQ Ön Ayar Dosyasını İçe Aktar</string>
+    <string name="export_apo">Ön Ayarı İçe Aktar</string>
+    <string name="sort_bands">Bantları Sırala</string>
+    <string name="reset">Sıfırla</string>
+    <string name="solo">Tekli</string>
+    <string name="enabled">Etkin</string>
+    <string name="frequency">Sıklık</string>
+    <string name="gain">Kazanç</string>
+    <string name="quality">Kalite</string>
+    <string name="filter_peaking">Çan</string>
+    <string name="filter_low_shelf">Düşük Raf</string>
+    <string name="filter_high_shelf">Yüksek Raf</string>
+    <string name="filter_low_pass">Düşük Geçiş</string>
+    <string name="filter_high_pass">Yüksek Geçiş</string>
+    <string name="filter_band_pass">Bant Atlama</string>
+    <string name="filter_notch">Çentik</string>
+    <string name="filter_all_pass">Atla</string>
+    <string name="filter_off">Kapalı</string>
+    <string name="presets">Ön Ayarlar</string>
+    <string name="android_dynamics_compressor">Sıkıştırıcı</string>
+    <string name="android_dynamics_expander">Genişletici</string>
+    <string name="android_dynamics_gate">Aralık</string>
+    <string name="android_dynamics_limiter">Sınırlayıcı</string>
+</resources>

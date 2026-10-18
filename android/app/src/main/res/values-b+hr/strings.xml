@@ -1,0 +1,33 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Ekvalizator</string>
+    <string name="controls">Kontrole</string>
+    <string name="bands">Trake</string>
+    <string name="band">Trake</string>
+    <string name="flat_response">Ravan izlaz</string>
+    <string name="calculate_frequencies">Izračunaj frekvencije</string>
+    <string name="import_preset">Uvezi APO</string>
+    <string name="import_apo_graphiceq">Uvezi APO (GraphicEQ)</string>
+    <string name="export_apo">Izvezi APO</string>
+    <string name="sort_bands">Razvrstaj trake</string>
+    <string name="reset">Vrati na tvorničke postavke</string>
+    <string name="solo">Solo</string>
+    <string name="enabled">Aktivirano</string>
+    <string name="frequency">Frekvencija</string>
+    <string name="gain">Pojačanje</string>
+    <string name="quality">Kvaliteta</string>
+    <string name="filter_peaking">Zvono</string>
+    <string name="filter_low_shelf">Niski shelf</string>
+    <string name="filter_high_shelf">Visoki shelf</string>
+    <string name="filter_low_pass">Nizak prolaz</string>
+    <string name="filter_high_pass">Filter visokog prolaza</string>
+    <string name="filter_band_pass">Premosnica</string>
+    <string name="filter_all_pass">Premosnica</string>
+    <string name="filter_off">Isključeno</string>
+    <string name="presets">Predlošci</string>
+    <string name="android_dynamics_compressor">Kompresor</string>
+    <string name="android_dynamics_gate">Vrata</string>
+    <string name="android_dynamics_limiter">Graničnik</string>
+</resources>

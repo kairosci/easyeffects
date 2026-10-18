@@ -1,0 +1,21 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="controls">Juhtnupud</string>
+    <string name="preamp">Eelvõimendus</string>
+    <string name="bands">Sagedusribasid</string>
+    <string name="band">Sagedusriba</string>
+    <string name="calculate_frequencies">Arvuta sagedused</string>
+    <string name="import_preset">Impordi APO</string>
+    <string name="import_apo_graphiceq">Impordi APO (GraphicEQ)</string>
+    <string name="export_apo">Ekspordi APO</string>
+    <string name="sort_bands">Järjesta sagedusribad</string>
+    <string name="reset">Lähtesta</string>
+    <string name="solo">Soolo</string>
+    <string name="enabled">Kasutusel</string>
+    <string name="frequency">Sagedus</string>
+    <string name="quality">Kvaliteet</string>
+    <string name="presets">Eelseadistused</string>
+    <string name="android_dynamics_compressor">Dünaamilise ulatuse tihendamine</string>
+</resources>

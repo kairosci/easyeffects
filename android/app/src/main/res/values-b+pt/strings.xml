@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Equalizador</string>
+    <string name="controls">Controles</string>
+    <string name="preamp">Pré-amplificador</string>
+    <string name="bands">Bandas</string>
+    <string name="band">Banda</string>
+    <string name="flat_response">Resposta plana</string>
+    <string name="calculate_frequencies">Calcular as Frequências</string>
+    <string name="import_preset">Importar APO</string>
+    <string name="import_apo_graphiceq">Importar APO (GraphicEQ)</string>
+    <string name="export_apo">Exportar APO</string>
+    <string name="sort_bands">Classificar bandas</string>
+    <string name="reset">Reiniciar</string>
+    <string name="solo">Sozinho</string>
+    <string name="enabled">Ativado</string>
+    <string name="frequency">Frequência</string>
+    <string name="gain">Ganho</string>
+    <string name="quality">Qualidade</string>
+    <string name="filter_peaking">Sino</string>
+    <string name="filter_low_shelf">prateleira de graves</string>
+    <string name="filter_high_shelf">prateleira de agudos</string>
+    <string name="filter_low_pass">filtro passa-baixas</string>
+    <string name="filter_high_pass">filtro passa-altas</string>
+    <string name="filter_band_pass">filtro passa-banda</string>
+    <string name="filter_notch">Rejeitar a Faixa</string>
+    <string name="filter_all_pass">filtro passa-tudo</string>
+    <string name="filter_off">Desligado</string>
+    <string name="presets">Predefinições</string>
+    <string name="android_dynamics_compressor">Compressor de Áudio</string>
+    <string name="android_dynamics_expander">Expandir</string>
+    <string name="android_dynamics_gate">Porta</string>
+    <string name="android_dynamics_limiter">Limitador</string>
+</resources>

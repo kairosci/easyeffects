@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Еквалайзер</string>
+    <string name="controls">Елементи керування</string>
+    <string name="preamp">Підсилення</string>
+    <string name="bands">Кількість смуг</string>
+    <string name="band">Смуга</string>
+    <string name="flat_response">Плоска характеристика</string>
+    <string name="calculate_frequencies">Розрахувати частоти</string>
+    <string name="import_preset">Імпорт APO</string>
+    <string name="import_apo_graphiceq">Імпорт APO (графічний)</string>
+    <string name="export_apo">Експорт APO</string>
+    <string name="sort_bands">Сортувати смуги</string>
+    <string name="reset">Скинути</string>
+    <string name="solo">Ізолювати</string>
+    <string name="enabled">Увімкнено</string>
+    <string name="frequency">Частота</string>
+    <string name="gain">Підсилення</string>
+    <string name="quality">Добротність</string>
+    <string name="filter_peaking">Дзвоновий фільтр (Peak)</string>
+    <string name="filter_low_shelf">Полицевий ФНЧ (Low-shelf)</string>
+    <string name="filter_high_shelf">Полицевий ФВЧ (High-shelf)</string>
+    <string name="filter_low_pass">ФНЧ (Low-pass)</string>
+    <string name="filter_high_pass">ФВЧ (High-pass)</string>
+    <string name="filter_band_pass">Смуговий фільтр (Bandpass)</string>
+    <string name="filter_notch">Режекторний фільтр (Notch)</string>
+    <string name="filter_all_pass">Фазовий фільтр (Allpass)</string>
+    <string name="filter_off">Вимкнено</string>
+    <string name="presets">Пресети</string>
+    <string name="android_dynamics_compressor">Компресор</string>
+    <string name="android_dynamics_expander">Експандер</string>
+    <string name="android_dynamics_gate">Гейт</string>
+    <string name="android_dynamics_limiter">Лімітер</string>
+</resources>

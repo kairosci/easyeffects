@@ -1,0 +1,28 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">Tonekontroll</string>
+    <string name="controls">Kontroll knapper</string>
+    <string name="bands">Bånd</string>
+    <string name="band">Bånd</string>
+    <string name="calculate_frequencies">Beregn frekvenser</string>
+    <string name="import_preset">Importer modell</string>
+    <string name="import_apo_graphiceq">Importer forhåndsinnstillinger</string>
+    <string name="export_apo">Importer forhåndsinnstillinger</string>
+    <string name="sort_bands">Bånd</string>
+    <string name="reset">Tilbakestill</string>
+    <string name="enabled">Påskrudd</string>
+    <string name="frequency">Frekvens</string>
+    <string name="gain">Forsterkning</string>
+    <string name="quality">Kvalitet</string>
+    <string name="filter_high_shelf">Høypass</string>
+    <string name="filter_low_pass">Lavpass</string>
+    <string name="filter_high_pass">Høypass</string>
+    <string name="filter_band_pass">Bånd</string>
+    <string name="filter_all_pass">Global Forbipassering</string>
+    <string name="filter_off">Av</string>
+    <string name="presets">Profiler</string>
+    <string name="android_dynamics_compressor">Kompressor</string>
+    <string name="android_dynamics_limiter">Begrenser</string>
+</resources>

@@ -1,0 +1,23 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">이퀄라이저</string>
+    <string name="band">대역폭 1</string>
+    <string name="import_preset">프리셋 가져오기</string>
+    <string name="import_apo_graphiceq">GraphicEQ 프리셋 파일 가져오기</string>
+    <string name="export_apo">프리셋 내보내기</string>
+    <string name="reset">재지정</string>
+    <string name="enabled">활성화됨</string>
+    <string name="frequency">주파수</string>
+    <string name="gain">게인</string>
+    <string name="filter_high_shelf">하이쉘프</string>
+    <string name="filter_low_pass">저대역</string>
+    <string name="filter_high_pass">고대역</string>
+    <string name="filter_band_pass">대역폭 바이패스</string>
+    <string name="filter_all_pass">바이패스</string>
+    <string name="filter_off">끄기</string>
+    <string name="presets">프리셋</string>
+    <string name="android_dynamics_compressor">컴프레서</string>
+    <string name="android_dynamics_limiter">리미터</string>
+</resources>

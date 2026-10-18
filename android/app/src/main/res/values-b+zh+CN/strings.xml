@@ -1,0 +1,36 @@
+<!-- Copyright © 2026 Wellington Wallace
+     Copyright © 2026 Alessio Attilio
+     SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <string name="equalizer_title">均衡器</string>
+    <string name="controls">控制项</string>
+    <string name="preamp">前置放大</string>
+    <string name="bands">频带数</string>
+    <string name="band">频带</string>
+    <string name="flat_response">平坦响应</string>
+    <string name="calculate_frequencies">计算频率</string>
+    <string name="import_preset">导入 APO 预设</string>
+    <string name="import_apo_graphiceq">导入 APO (GraphicEQ) 预设</string>
+    <string name="export_apo">导出 APO 预设</string>
+    <string name="sort_bands">排序频带</string>
+    <string name="reset">重置</string>
+    <string name="solo">独奏</string>
+    <string name="enabled">启用</string>
+    <string name="frequency">频率</string>
+    <string name="gain">增益</string>
+    <string name="quality">品质因数 (Q)</string>
+    <string name="filter_peaking">钟形</string>
+    <string name="filter_low_shelf">低架</string>
+    <string name="filter_high_shelf">高架</string>
+    <string name="filter_low_pass">低通</string>
+    <string name="filter_high_pass">高通</string>
+    <string name="filter_band_pass">带通</string>
+    <string name="filter_notch">陷波</string>
+    <string name="filter_all_pass">全通</string>
+    <string name="filter_off">关闭</string>
+    <string name="presets">预设</string>
+    <string name="android_dynamics_compressor">压缩器</string>
+    <string name="android_dynamics_expander">扩展器</string>
+    <string name="android_dynamics_gate">门限</string>
+    <string name="android_dynamics_limiter">限幅器</string>
+</resources>
